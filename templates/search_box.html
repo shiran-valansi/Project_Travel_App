@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
+    <link href="static/button.css" rel="stylesheet">
+
+    <title>Places Search Box</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #description {
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      #infowindow-content .title {
+        font-weight: bold;
+      }
+
+      #infowindow-content {
+        display: none;
+      }
+
+      #map #infowindow-content {
+        display: inline;
+      }
+
+      .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+      }
+
+      .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
+
+      #title {
+        color: #fff;
+        background-color: #4d90fe;
+        font-size: 25px;
+        font-weight: 500;
+        padding: 6px 12px;
+      }
+      #target {
+        width: 345px;
+      }
+    </style>
+  </head>
+  <body>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="map"></div>
+<!--     <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initAutocomplete"></script> -->
+    <script>
+      // This example adds a search box to a map, using the Google Place Autocomplete
+      // feature. People can enter geographical searches. The search box will return a
+      // pick list containing a mix of places and predicted search terms.
+
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      //movedfrom line 150
+      var markers = [];
+
+
+      function initAutocomplete() {
+          //the map view will be constant
+          const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13,
+            mapTypeId: 'roadmap'
+            });
+
+          //****added geolocation to find user's location ****
+          // infowindow saying my position is found
+          let infoWindow = new google.maps.InfoWindow;
+
+          // HTML5 geolocation.
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Location found.');
+                infoWindow.open(map);
+                map.setCenter(pos);
+              }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+              }); //endof getCurrentPosition
+          } else {
+            // Browser doesn't support Geolocation
+              handleLocationError(false, infoWindow, map.getCenter());
+            }
+
+          // ***End of addition- geolocation***
+
+          // Create the search box and link it to the UI element.
+          var input = document.getElementById('pac-input');
+          var searchBox = new google.maps.places.SearchBox(input);
+          map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+          // Bias the SearchBox results towards current map's viewport.
+          map.addListener('bounds_changed', function() {
+            searchBox.setBounds(map.getBounds());
+          });
+
+          // var markers = [];
+
+
+          // Listen for the event fired when the user selects a prediction and retrieve
+          // more details for that place.
+          searchBox.addListener('places_changed', function() {
+              var places = searchBox.getPlaces();
+
+              if (places.length == 0) {
+                  return;
+              }
+
+              // Clear out the old markers.
+              ///////commenting out in order to save marker
+              // markers.forEach(function(marker) {
+              //   marker.setMap(null);
+              // });
+              // markers = [];
+
+              // For each place, get the icon, name and location.
+              var bounds = new google.maps.LatLngBounds();
+              places.forEach(function(place) {
+                  if (!place.geometry) {
+                      console.log("Returned place contains no geometry");
+                      return;
+                  }
+                  var icon = {
+                      // *******This is what changes the marker icon******
+                      url: place.icon,
+                      // url: "http://www.clker.com/cliparts/v/G/a/3/i/a/map-marker-hi.png",
+                      size: new google.maps.Size(71, 71),
+                      origin: new google.maps.Point(0, 0),
+                      anchor: new google.maps.Point(17, 34),
+                      scaledSize: new google.maps.Size(25, 25)
+                  };
+
+                  // Create a marker for each place.
+                  ///////add condition to save marker or not
+                  /////// example- event listener for click on "save button"
+                  markers.push(new google.maps.Marker({
+                      map: map,
+                      icon: icon,
+                      title: place.name,
+                      position: place.geometry.location
+                  }));
+
+                  console.log("just pushed in marker");
+                  
+                  console.log("place.geometry.location:");
+                  console.log(place.geometry.location);
+
+                  if (place.geometry.viewport) {
+                    // Only geocodes have viewport.
+                      bounds.union(place.geometry.viewport);
+                  } else {
+                      bounds.extend(place.geometry.location);
+                  }
+
+                //trial infoWindow -- works! multiple infowindows
+                
+                for ( let i=0; i<markers.length; i++){
+                    //add content and "Add" button
+
+                    let marker = markers[i];
+                    var latlng = marker.getPosition().toString();
+
+                    var ppName = marker.title;
+                    var data = {latlng: latlng, ppName: ppName}; 
+                    console.log("marker location:" + latlng);
+                    var contentString = "<h1>" + marker.title + "</h1>"+ 
+                        "<button id='addMarker'"+i +"class='addButton'>+Add</button>";
+
+                    var infowindow1 = new google.maps.InfoWindow({
+                          content: contentString,
+                          maxWidth: 200
+                      });
+
+                    $.post("/add-pinpoint", data, showRestults);
+
+
+                    marker.addListener('click', function() {
+             
+                      infowindow1.open(map, marker);
+                    });
+
+
+
+                    }//endof trial
+
+              }); //endof places.foreach
+            map.fitBounds(bounds);
+          }); //endof searchBox.addListener
+      
+
+// // add info window trial - doesn't work
+    
+//       var contentString = "<h1>info </h1>"
+
+//       var infowindow1 = new google.maps.InfoWindow({
+//           content: contentString,
+//           maxWidth: 200
+//         });
+
+//       markers.addListener('click', function() {
+//           console.log("markers");
+//           console.log(markers);
+//           infowindow1.open(map, markers);
+//         });
+// ///end of trial['']
+
+        //To handle location error:
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+              infoWindow.setPosition(pos);
+              infoWindow.setContent(browserHasGeolocation ?
+                                'Error: The Geolocation service failed.' :
+                                'Error: Your browser doesn\'t support geolocation.');
+               infoWindow.open(map);
+        }
+
+// add info window trial -- doesn't work
+    
+    // var contentString = "<h1>My info</h1>"
+    // for (let marker of markers){
+
+    //     var infowindow1 = new google.maps.InfoWindow({
+    //         content: contentString,
+    //         maxWidth: 200
+    //     });
+
+    //     marker.addListener('click', function() {
+ 
+    //       infowindow1.open(map, marker);
+    //     });
+
+    // }
+    
+///end of trial
+    }//endof initAutocomplete
+          
+    function showRestults(result){
+      alert(result);
+
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initAutocomplete"></script>
+  </body>
+</html>
+
+
+
+
+<!-- check how to ask if we want to save a pinpoint, chack how to change color, info box -->
