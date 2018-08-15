@@ -5,7 +5,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, request, jsonify, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, User
+from model import connect_to_db, db, User, Pinpoint
 # import model
 
 import os 
@@ -72,14 +72,19 @@ def process_new_user():
 
 @app.route("/add-pinpoint", methods=['POST'])
 def add_latlng():
-    latlng= request.form.get("latlng")
+    print("inn add_latlng")
+    # latlng= request.form.get("latlng")
     pp_name= request.form.get("ppName")
 
-    lat = latlng.split(",")[0][1:]
-    lng = latlng.split(",")[1][:-1]
+    # lat = latlng.split(",")[0][1:]
+    # lng = latlng.split(",")[1][:-1]
 
 
-    new_pinpoint=Pinpoint(pp_name=pp_name, lat=lat, lng=lng)
+    # new_pinpoint=Pinpoint(pp_name=pp_name, lat=lat, lng=lng)
+    new_pinpoint=Pinpoint(pp_name=pp_name)
+    db.session.add(new_pinpoint)
+    db.session.commit()
+
 
     return "got latlng and pinpoint"
 

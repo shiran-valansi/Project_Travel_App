@@ -84,11 +84,11 @@ class Pinpoint(db.Model):
 
     trip_id = db.Column(db.Integer, 
                         db.ForeignKey('trips.trip_id'),
-                        nullable=False)
+                        nullable=True)
     start_time = db.Column(db.DateTime, nullable=True)
     duration = db.Column(db.Float(2), nullable=True)
-    lat = db.Column(db.Float, nullable=False)
-    lng = db.Column(db.Float, nullable=False)
+    lat = db.Column(db.Float, nullable=True)
+    lng = db.Column(db.Float, nullable=True)
     rating = db.Column(db.Integer, nullable=True)
     ####put a defalt from google
     description = db.Column(db.String(200), nullable=True)

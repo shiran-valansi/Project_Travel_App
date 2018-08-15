@@ -44,7 +44,8 @@
 
             var infowindow = new google.maps.InfoWindow({content: contentString, maxWidth: 200
             });
-
+//if we only have one infowindow for several listeners, it will jump from marker to marker on click
+//if we add an info window for every listener, all the infowindows will stay until closed
             var infowindow2 = new google.maps.InfoWindow({content: contentString, maxWidth: 200
                         });            
             marker.addListener('click', function() {

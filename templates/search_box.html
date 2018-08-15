@@ -204,9 +204,6 @@
 
                   console.log("just pushed in marker");
                   
-                  console.log("place.geometry.location:");
-                  console.log(place.geometry.location);
-
                   if (place.geometry.viewport) {
                     // Only geocodes have viewport.
                       bounds.union(place.geometry.viewport);
@@ -215,35 +212,41 @@
                   }
 
                 //trial infoWindow -- works! multiple infowindows
-                
+
+
+
+                // saveMarkerInfo();
                 for ( let i=0; i<markers.length; i++){
                     //add content and "Add" button
 
                     let marker = markers[i];
-                    var latlng = marker.getPosition().toString();
+                    // var latlng = marker.getPosition().toString();
 
                     var ppName = marker.title;
-                    var data = {latlng: latlng, ppName: ppName}; 
-                    console.log("marker location:" + latlng);
-                    var contentString = "<h1>" + marker.title + "</h1>"+ 
-                        "<button id='addMarker'"+i +"class='addButton'>+Add</button>";
+                    // var data = {ppName: ppName}; 
+                    // console.log("marker location:" + latlng);
+                    // var contentString = "<h1>" + marker.title + "</h1>"+ 
+                    //     "<button id='addMarker'"+i +"class='addButton'>+Add</button>";
+
+                    var contentString = "<h1>" + marker.title + "</h1>"+ "<button id='addMarker' class='addButton' onclick='saveMarkerInfo()'>+Add</button>";
+
 
                     var infowindow1 = new google.maps.InfoWindow({
                           content: contentString,
                           maxWidth: 200
                       });
 
-                    $.post("/add-pinpoint", data, showRestults);
 
+                    //listening for click on marker
 
                     marker.addListener('click', function() {
              
                       infowindow1.open(map, marker);
+
                     });
 
 
-
-                    }//endof trial
+                    }//endof infoWindow trial
 
               }); //endof places.foreach
             map.fitBounds(bounds);
@@ -275,30 +278,40 @@
                infoWindow.open(map);
         }
 
-// add info window trial -- doesn't work
-    
-    // var contentString = "<h1>My info</h1>"
-    // for (let marker of markers){
-
-    //     var infowindow1 = new google.maps.InfoWindow({
-    //         content: contentString,
-    //         maxWidth: 200
-    //     });
-
-    //     marker.addListener('click', function() {
- 
-    //       infowindow1.open(map, marker);
-    //     });
-
-    // }
-    
-///end of trial
     }//endof initAutocomplete
           
-    function showRestults(result){
-      alert(result);
+    
 
+// function to save to database
+    function saveMarkerInfo(){
+        console.log("in saveMarkerInfo");
+
+        ///////////////////how to do without for loop
+        for ( let i=0; i<markers.length; i++){
+            console.log("in for loop");
+            var ppName = markers[i].title;
+            // var latlng = markers[i].getPosition().toString();
+
+            // var data = {ppName: ppName, latlng: latlng}; 
+            // console.log("marker location: " + latlng[0] + latlng[1]);
+            // console.log("latlng: " + latlng);
+            
+            $.post("/add-pinpoint", {"ppName": ppName}, resultFunc);
+            console.log("markers[i].title: "+ ppName);
+           }
+     }
+
+    function resultFunc(result){
+      console.log("in resultFunc");
+      alert(result);
     }
+
+
+  
+
+
+
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initAutocomplete"></script>
   </body>
