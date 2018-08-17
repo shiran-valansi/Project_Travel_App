@@ -15,8 +15,7 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-# Normally, if you use an undefined variable in Jinja2, it fails silently.
-# This is horrible. Fix this so that, instead, it raises an error.
+# If you use an undefined variable in Jinja2 it raises an error
 app.jinja_env.undefined = StrictUndefined
 
 
@@ -73,20 +72,39 @@ def process_new_user():
 @app.route("/add-pinpoint", methods=['POST'])
 def add_latlng():
     print("inn add_latlng")
-    # latlng= request.form.get("latlng")
-    pp_name= request.form.get("ppName")
 
-    # lat = latlng.split(",")[0][1:]
-    # lng = latlng.split(",")[1][:-1]
+    name= request.form.get("name")
+    latlng = request.form.get("latlng")
+# getting lat lng positions as floats
+    latlng = latlng.strip(" ")
+    latlng = latlng.strip("(")
+    latlng = latlng.strip(")")
+    latlng = latlng.split(",")
+    lat = float(latlng[0])
+    lng = float(latlng[1])
+
+    # print("lat:")
+    # print(lat)
+    # print("lng:")
+    # print(lng)
+
+#query to see if a pinpoint with the same name exists in the db
+    find_pinpoint = Pinpoint.query.filter_by(lat=lat, lng=lng).first()
+    
+    
+  
+    if not find_pinpoint:
+        # new_pinpoint=Pinpoint(name=name, lat=lat, lng=lng)
+        new_pinpoint=Pinpoint(name=name, lat=lat, lng=lng)
+        db.session.add(new_pinpoint)
+        db.session.commit()
+    else:
+
+        # flash message not working
+        flash("pinpoint already exists")
 
 
-    # new_pinpoint=Pinpoint(pp_name=pp_name, lat=lat, lng=lng)
-    new_pinpoint=Pinpoint(pp_name=pp_name)
-    db.session.add(new_pinpoint)
-    db.session.commit()
-
-
-    return "got latlng and pinpoint"
+    return "have pinpoint"
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
@@ -99,3 +117,4 @@ if __name__ == "__main__":
     DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0", port="5001")
+#############make condition to add to database or not**************

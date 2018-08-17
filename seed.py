@@ -73,9 +73,9 @@ def load_pinpoints(pinpoints_filename):
 
     for row in open(pinpoints_filename):
         row = row.rstrip()
-        pp_name, trip_id, start_time, duration, lat, lng, rating, description = row.split(",")
+        name, trip_id, start_time, duration, lat, lng, rating, description = row.split(",")
 
-        pinpoint = Pinpoint(pp_name=pp_name,
+        pinpoint = Pinpoint(name=name,
                     trip_id=trip_id,
                     start_time=start_time,
                     duration=duration,

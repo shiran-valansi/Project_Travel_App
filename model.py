@@ -53,7 +53,7 @@ class Trip(db.Model):
     __tablename__= "trips"
 
     trip_id = db.Column(db.Integer, autoincrement=True, 
-                        primary_key=True, nullable=False)
+                        primary_key=True)
     trip_name = db.Column(db.String(32), nullable=False)
 
     start_date = db.Column(db.DateTime, nullable=True)
@@ -79,8 +79,8 @@ class Pinpoint(db.Model):
     __tablename__="pinpoints"
     
     pp_id = db.Column(db.Integer, autoincrement=True, 
-                      primary_key=True, nullable=False)
-    pp_name = db.Column(db.String(64), nullable=False)
+                      primary_key=True)
+    name = db.Column(db.String(64), nullable=False)
 
     trip_id = db.Column(db.Integer, 
                         db.ForeignKey('trips.trip_id'),
@@ -100,7 +100,7 @@ class Pinpoint(db.Model):
     def __repr__(self):
         """Provide representation of Pinpoint"""
 
-        return f"<Pinpoint: pp_id= {pp_id}, trip_id= {trip_id}, pp_name= {pp_name}, start_time= {start_time}, duration= {duration}, lat= {lat}, lng= {lng}, rating= {rating}, description= {description}"
+        return f"<Pinpoint: pp_id= {pp_id}, trip_id= {trip_id}, name= {name}, start_time= {start_time}, duration= {duration}, lat= {lat}, lng= {lng}, rating= {rating}, description= {description}"
 
 
 class Tag(db.Model):
@@ -108,7 +108,7 @@ class Tag(db.Model):
 
     __tablename__="tags"
 
-    tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
+    tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     tag_word = db.Column(db.String(50), nullable=True)
 
     """Provide representation of Tag"""
@@ -124,7 +124,7 @@ class TripTag(db.Model):
     __tablename__="trip_tags"
 
     trip_tag_id = db.Column(db.Integer, autoincrement=True, 
-                            primary_key=True, nullable=False)
+                            primary_key=True)
     tag_id = db.Column(db.Integer, 
                        db.ForeignKey('tags.tag_id'), 
                        nullable=False)
@@ -147,7 +147,7 @@ class Photo(db.Model):
     __tablename__="photos"
 
     photo_id = db.Column(db.Integer, autoincrement=True, 
-                        primary_key=True, nullable=False)
+                        primary_key=True)
     file_path = db.Column(db.String(200), nullable=False)
     file_name = db.Column(db.String(64), nullable=False)
     trip_id = db.Column(db.Integer, 
@@ -172,7 +172,7 @@ class Friend(db.Model):
     __tablename__="friends"
 
     user_friend_id = db.Column(db.Integer, autoincrement=True, 
-                              primary_key=True, nullable=False)
+                              primary_key=True)
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.user_id'), 
                         nullable=False)

@@ -1,17 +1,22 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
+    <meta charset="utf-8"> -->
 
-    <link href="static/button.css" rel="stylesheet">
+<!-- <link href="static/button.css" rel="stylesheet">-->
 
-    <title>Places Search Box</title>
-    <style>
+<!-- linking css style for map-->
+<!--     <link rel="stylesheet" href="/static/css/map-style.css">
+    <link rel="stylesheet" href="/static/css/infowindow-modal.css">
+
+    <title>Places Search Box</title> -->
+<!--     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
@@ -93,12 +98,52 @@
       #target {
         width: 345px;
       }
-    </style>
-  </head>
-  <body>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-    <div id="map"></div>
+    </style> -->
+<!--   </head> -->
+
+{% extends 'base.html' %}
+{% block content %}
+{% include 'modal.html' %}
+<!--   <body>-->  
+  <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+  <div id="map"></div>
+
+<!--   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+  Launch demo modal
+</button>
+ -->
+  <!-- <div class="modal">
+      <div class="modal-content">
+          <span class="close-button">×</span>
+          <h1>Hello, I am a modal!</h1>
+      </div>
+  </div> -->
+
+<!-- Modal -->
+<!-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
 <!--     <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initAutocomplete"></script> -->
+
+    
+
     <script>
       // This example adds a search box to a map, using the Google Place Autocomplete
       // feature. People can enter geographical searches. The search box will return a
@@ -140,7 +185,7 @@
                 handleLocationError(true, infoWindow, map.getCenter());
               }); //endof getCurrentPosition
           } else {
-            // Browser doesn't support Geolocation
+            // If browser doesn't support Geolocation
               handleLocationError(false, infoWindow, map.getCenter());
             }
 
@@ -193,8 +238,7 @@
                   };
 
                   // Create a marker for each place.
-                  ///////add condition to save marker or not
-                  /////// example- event listener for click on "save button"
+                 
                   markers.push(new google.maps.Marker({
                       map: map,
                       icon: icon,
@@ -214,21 +258,22 @@
                 //trial infoWindow -- works! multiple infowindows
 
 
-
                 // saveMarkerInfo();
                 for ( let i=0; i<markers.length; i++){
                     //add content and "Add" button
 
                     let marker = markers[i];
-                    // var latlng = marker.getPosition().toString();
-
-                    var ppName = marker.title;
-                    // var data = {ppName: ppName}; 
-                    // console.log("marker location:" + latlng);
+                   
                     // var contentString = "<h1>" + marker.title + "</h1>"+ 
                     //     "<button id='addMarker'"+i +"class='addButton'>+Add</button>";
 
-                    var contentString = "<h1>" + marker.title + "</h1>"+ "<button id='addMarker' class='addButton' onclick='saveMarkerInfo()'>+Add</button>";
+                    
+                    // var contentString = "<h1>" + marker.title + "</h1>"+ "<button id='addMarker' class='addButton' onclick='saveMarkerInfo()'>+Add</button>";
+                   var contentString = "<h1>" + marker.title + "</h1>"+ "<button id='addMarker' class='btn btn-primary'  data-toggle='modal' data-target='#exampleModalCenter' >+Add</button>";
+
+//   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+//   Launch demo modal
+// </button>
 
 
                     var infowindow1 = new google.maps.InfoWindow({
@@ -253,22 +298,6 @@
           }); //endof searchBox.addListener
       
 
-// // add info window trial - doesn't work
-    
-//       var contentString = "<h1>info </h1>"
-
-//       var infowindow1 = new google.maps.InfoWindow({
-//           content: contentString,
-//           maxWidth: 200
-//         });
-
-//       markers.addListener('click', function() {
-//           console.log("markers");
-//           console.log(markers);
-//           infowindow1.open(map, markers);
-//         });
-// ///end of trial['']
-
         //To handle location error:
         function handleLocationError(browserHasGeolocation, infoWindow, pos) {
               infoWindow.setPosition(pos);
@@ -289,15 +318,16 @@
         ///////////////////how to do without for loop
         for ( let i=0; i<markers.length; i++){
             console.log("in for loop");
-            var ppName = markers[i].title;
-            // var latlng = markers[i].getPosition().toString();
+            var name = markers[i].title;
+            var latlng = markers[i].getPosition().toString();
 
-            // var data = {ppName: ppName, latlng: latlng}; 
-            // console.log("marker location: " + latlng[0] + latlng[1]);
-            // console.log("latlng: " + latlng);
+
+            var place = {"name": name, "latlng": latlng}; 
+          
             
-            $.post("/add-pinpoint", {"ppName": ppName}, resultFunc);
-            console.log("markers[i].title: "+ ppName);
+            // $.post("/add-pinpoint", {"name": name}, resultFunc);
+            $.post("/add-pinpoint", place, resultFunc);
+            console.log("markers[i].title: "+ name);
            }
      }
 
@@ -307,17 +337,14 @@
     }
 
 
-  
-
-
-
 
     </script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initAutocomplete"></script>
-  </body>
-</html>
 
+<!-- <script src="/static/js/modal.js" ></script> 
+ --><!--   </body> -->
+<!-- </html>
+ -->
 
-
-
-<!-- check how to ask if we want to save a pinpoint, chack how to change color, info box -->
+{% endblock %}
