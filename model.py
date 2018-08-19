@@ -56,8 +56,8 @@ class Trip(db.Model):
                         primary_key=True)
     trip_name = db.Column(db.String(32), nullable=False)
 
-    start_date = db.Column(db.DateTime, nullable=True)
-    end_date = db.Column(db.DateTime, nullable=True)
+    start_trip = db.Column(db.DateTime, nullable=True)
+    end_trip = db.Column(db.DateTime, nullable=True)
     is_public = db.Column(db.Boolean, default=True,
                                       nullable=False)
 
@@ -69,7 +69,7 @@ class Trip(db.Model):
 
     def __repr__(self):
         """Provide representation of Trip"""
-        return f"<Trip: trip_id= {trip_id}, trip_name= {trip_name}, start_date= {start_date}, end_date= {end_date}, is_public= {is_public}>"
+        return f"<Trip: trip_id= {trip_id}, trip_name= {trip_name}, start_trip= {start_trip}, end_trip= {end_trip}, is_public= {is_public}>"
 
 
 
@@ -85,8 +85,8 @@ class Pinpoint(db.Model):
     trip_id = db.Column(db.Integer, 
                         db.ForeignKey('trips.trip_id'),
                         nullable=True)
-    start_time = db.Column(db.DateTime, nullable=True)
-    duration = db.Column(db.Float(2), nullable=True)
+    start = db.Column(db.DateTime, nullable=True)
+    end = db.Column(db.Float(2), nullable=True)
     lat = db.Column(db.Float, nullable=True)
     lng = db.Column(db.Float, nullable=True)
     rating = db.Column(db.Integer, nullable=True)
@@ -100,7 +100,7 @@ class Pinpoint(db.Model):
     def __repr__(self):
         """Provide representation of Pinpoint"""
 
-        return f"<Pinpoint: pp_id= {pp_id}, trip_id= {trip_id}, name= {name}, start_time= {start_time}, duration= {duration}, lat= {lat}, lng= {lng}, rating= {rating}, description= {description}"
+        return f"<Pinpoint: pp_id= {pp_id}, trip_id= {trip_id}, name= {name}, start= {start}, end= {end}, lat= {lat}, lng= {lng}, rating= {rating}, description= {description}"
 
 
 class Tag(db.Model):
@@ -197,7 +197,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our database.
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres:///temp'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres:///travel'
     app.config['SQLALCHEMY_ECHO'] = False
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app

@@ -49,14 +49,14 @@ def load_trips(trips_filename):
 
     for row in open(trips_filename):
         row = row.rstrip()
-        trip_name, start_date, end_date, is_public = row.split(",")
+        trip_name, start_trip, end_trip, is_public = row.split(",")
         if (is_public=='True'):
             is_public = True
         else:
             is_public = False
         trip = Trip(trip_name=trip_name,
-                    start_date=start_date,
-                    end_date=end_date,
+                    start_trip=start_trip,
+                    end_trip=end_trip,
                     is_public=is_public)
                     
 
@@ -73,12 +73,12 @@ def load_pinpoints(pinpoints_filename):
 
     for row in open(pinpoints_filename):
         row = row.rstrip()
-        name, trip_id, start_time, duration, lat, lng, rating, description = row.split(",")
+        name, trip_id, start, end, lat, lng, rating, description = row.split(",")
 
         pinpoint = Pinpoint(name=name,
                     trip_id=trip_id,
-                    start_time=start_time,
-                    duration=duration,
+                    start=start,
+                    end=end,
                     lat=lat,
                     lng=lng,
                     rating=rating,
