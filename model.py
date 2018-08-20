@@ -86,7 +86,7 @@ class Pinpoint(db.Model):
                         db.ForeignKey('trips.trip_id'),
                         nullable=True)
     start = db.Column(db.DateTime, nullable=True)
-    end = db.Column(db.Float(2), nullable=True)
+    end = db.Column(db.DateTime, nullable=True)
     lat = db.Column(db.Float, nullable=True)
     lng = db.Column(db.Float, nullable=True)
     rating = db.Column(db.Integer, nullable=True)

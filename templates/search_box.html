@@ -323,13 +323,14 @@
             console.log("in for loop");
             var name = markers[i].title;
             var latlng = markers[i].getPosition().toString();
-            var start = document.getElementById('start').value;
+            var start = document.getElementById("start").value;
+            var end = document.getElementById("end").value;
+            var rating = document.getElementById("rating").value;
+            var description = document.getElementById("description").value;
 
-            var end = document.getElementById('end').value;
 
-
-            var place = {"name": name, "latlng": latlng, "start": start,
-            "end":end}; 
+            var place = {"name": name, "start": start,
+            "end":end, "latlng": latlng, "rating": rating, "description":description}; 
           
             
             // $.post("/add-pinpoint", {"name": name}, resultFunc);

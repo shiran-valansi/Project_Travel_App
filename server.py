@@ -8,6 +8,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Pinpoint
 # import model
 
+import datetime
+
 import os 
 
 app = Flask(__name__)
@@ -83,29 +85,30 @@ def add_latlng():
     lat = float(latlng[0])
     lng = float(latlng[1])
 
-    start= request.form.get("end")
-    print("this is start:")
-    print(start)
-    # end= request.form.get("end")
-    # print("lat:")
-    # print(lat)
-    # print("lng:")
-    # print(lng)
+    start= request.form.get("start")
+    # print("this is start:")
+    # print(start)
+    end= request.form.get("end")
+    rating= request.form.get("rating")
+    description= request.form.get("description")
+
 
 #query to see if a pinpoint with the same name exists in the db
-    # find_pinpoint = Pinpoint.query.filter_by(lat=lat, lng=lng).first()
+    find_pinpoint = Pinpoint.query.filter_by(lat=lat, lng=lng).first()
     
     
   
-    # if not find_pinpoint:
-    #     # new_pinpoint=Pinpoint(name=name, lat=lat, lng=lng)
-    #     new_pinpoint=Pinpoint(name=name, start=start, end=end, lat=lat, lng=lng)
-    #     db.session.add(new_pinpoint)
-    #     db.session.commit()
-    # else:
+    if not find_pinpoint:
+        # new_pinpoint=Pinpoint(name=name, lat=lat, lng=lng)
 
-    #     # flash message not working
-    #     flash("pinpoint already exists")
+        new_pinpoint=Pinpoint(name=name, start=start, end=end, lat=lat, lng=lng, rating=rating, description=description)
+
+        db.session.add(new_pinpoint)
+        db.session.commit()
+    else:
+
+        # flash message not working
+        flash("pinpoint already exists")
 
 
     return "have pinpoint"
