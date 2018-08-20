@@ -1,31 +1,22 @@
 {% extends 'base.html' %}
-
-{% block title %}  
-                  Melons Home 
-{% endblock %}
-
-
-
 {% block content %}
 
-    <h1> Uber Melon's Most Loved Melons </h1>
+<h1>Travelary</h1>
 
-    <p id="main-pic">
-        <img src="http://www.medicalwesthospital.org/tyfoon/site/fckeditor/image/melong.jpeg" 
-        alt="melons" >
-    </p>
 
-    <form action="/get-name">
-        Please type in your name:
-        <br>
-        <input type="text" name="name" required>
-        <br><br>
-        <input type="submit" value="Submit">
+<p>
+    <a href="/login">
+        <h2>Log In</h2>
+    </a>
+</p>
 
-    </form>
+
+<p>
+    <a href="/register">
+        <h2>Register</h2>
+    </a>
+</p>
 
 
 
 {% endblock %}
-
-

@@ -26,20 +26,47 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
-    return render_template("maptry.html", key=os.environ['GOOGLE_API_KEY'])
-
-
-@app.route('/search')
-def index2():
-    """testing search box."""
-
-    return render_template("search_box.html", key=os.environ['GOOGLE_API_KEY'])
+    return render_template("homepage.html")
 
 
 
-@app.route('/login')
-def login_page():
+@app.route('/login', methods=["GET"])
+def show_login_form():
+    """Shows login form for users."""
+
     return render_template("login.html")
+
+
+
+
+@app.route("/login", methods=["POST"])
+def log_in_user():
+    """Checks for email and password in database, then logs in if they match."""
+
+    # gets email and password from form
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    # query db for user email
+    check_email = User.query.filter(User.email==email).first()
+
+    # check if email is in db
+    if check_email:
+        check_email_and_pw = User.query.filter(User.email==email, User.password==password).first()
+
+        if check_email_and_pw:
+            session["current_user"] = email
+            flash("Logged in as %s" % email)
+            return redirect("/menu")
+
+        else:
+            flash("Email and password don't match! Try again.")
+            return render_template("login.html")
+
+    else:
+        flash("Your email is not registered. Please register here!")
+        return redirect("/register")
+
 
 
 
@@ -69,7 +96,31 @@ def process_new_user():
         flash("You've already registered, please login")
 
 
-    return render_template(menu.html)
+    return redirect("/login")
+
+
+
+@app.route('/search')
+def index2():
+    """Map with search box"""
+
+    return render_template("search_box.html", key=os.environ['GOOGLE_API_KEY'])
+
+
+
+
+
+
+
+
+
+
+
+@app.route("/menu")
+def show_menu():
+    return render_template("menu.html")
+
+
 
 @app.route("/add-pinpoint", methods=['POST'])
 def add_latlng():
@@ -77,7 +128,7 @@ def add_latlng():
 
     name= request.form.get("name")
     latlng = request.form.get("latlng")
-# getting lat lng positions as floats
+    # getting lat lng positions as floats
     latlng = latlng.strip(" ")
     latlng = latlng.strip("(")
     latlng = latlng.strip(")")
@@ -124,4 +175,3 @@ if __name__ == "__main__":
     DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0", port="5001")
-#############make condition to add to database or not**************
