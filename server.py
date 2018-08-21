@@ -1,11 +1,15 @@
 """TravelApp"""
 
+
+##########flash messages not working
+
+
 from jinja2 import StrictUndefined
 
 from flask import Flask, request, jsonify, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, User, Pinpoint
+from model import connect_to_db, db, User, Pinpoint, Trip, UserTrip, Tag, TripTag, Friend
 # import model
 
 import datetime
@@ -57,8 +61,8 @@ def log_in_user():
         if check_email_and_pw:
             session["current_user"] = email
             flash("Logged in as %s" % email)
-            return redirect("/menu")
-
+            # return redirect("/users", check_email_and_pw.user_id)#############################
+            return redirect("/users/{}".format(check_email_and_pw.user_id))
         else:
             flash("Email and password don't match! Try again.")
             return render_template("login.html")
@@ -100,6 +104,45 @@ def process_new_user():
 
 
 
+@app.route("/logout", methods=["GET"])
+def log_out_user():
+    """Logs out user."""
+
+    session.clear()
+    flash("You have been logged out!")
+
+    return redirect("/")
+
+
+
+@app.route("/users/<user_id>")
+# @app.route("/users")
+def get_user_details(user_id):
+    """Gets and shows details about user."""
+    # one way to get list of user trips based on user id
+    # current_user = User.query.filter(User.user_id==user_id).first()
+    # trips_list=current_user.trips
+
+    # get list of trips for this user based on user id
+    current_user = User.query.filter(User.user_id==user_id).first()
+
+    
+    #getting list of friend ids for this user
+    friends_id_list = Friend.query.filter(Friend.user_id == user_id).all()
+    friends_list = []
+    for friend in friends_id_list:
+        user_id_2 = friend.friend_id
+        # getting list of trips of current friend
+        current_friend = User.query.filter(User.user_id==user_id_2).first()
+        # friends list is a lis of friends' trips
+        friends_list.append(current_friend)
+
+
+    return render_template("user_profile.html", user=current_user, friends_list=friends_list)
+                            
+
+
+
 @app.route('/search')
 def index2():
     """Map with search box"""
@@ -116,9 +159,9 @@ def index2():
 
 
 
-@app.route("/menu")
-def show_menu():
-    return render_template("menu.html")
+# @app.route("/menu")
+# def show_menu():
+#     return render_template("menu.html")
 
 
 

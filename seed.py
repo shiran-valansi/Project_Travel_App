@@ -2,7 +2,7 @@
 
 import datetime
 from sqlalchemy import func
-from model import User, Trip, Pinpoint, Tag, Photo, Friend, connect_to_db, db
+from model import User, Trip, UserTrip, Pinpoint, Tag, Photo, Friend, connect_to_db, db
 from server import app
 
 
@@ -65,6 +65,28 @@ def load_trips(trips_filename):
 
     # Once we're done, we should commit our work
     db.session.commit()
+
+
+
+def load_user_trips(user_trips_filename):
+    print("UserTrips")
+    UserTrip.query.delete()
+
+    for row in open(user_trips_filename):
+        row = row.rstrip()
+        user_id, trip_id = row.split(",")
+        
+        user_trip = UserTrip(user_id=user_id,
+                              trip_id=trip_id)
+                    
+
+        # We need to add to the session or it won't ever be stored
+        db.session.add(user_trip)
+
+    # Once we're done, we should commit our work
+    db.session.commit()
+
+
 
 
 def load_pinpoints(pinpoints_filename):
@@ -134,8 +156,8 @@ def load_friends(friends_filename):
 
     for row in open(friends_filename):
         row = row.rstrip()
-        user_id, friend_id = row.split(",")
-        friend = Friend(user_id=user_id, 
+        user_id,friend_id = row.split(",")
+        friend = Friend(user_id=user_id,
                         friend_id=friend_id)
         # We need to add to the session or it won't ever be stored
         db.session.add(friend)
@@ -151,6 +173,8 @@ if __name__ == "__main__":
 
     users_filename = "data/users_data.csv"
     trips_filename = "data/trips_data.csv"
+    user_trips_filename = "data/user_trips_data.csv"
+
     pinpoints_filename = "data/pinpoints_data.csv"
     tags_filename = "data/tags_data.csv"
     photos_filename = "data/photos_data.csv"
@@ -159,11 +183,12 @@ if __name__ == "__main__":
     
     load_users(users_filename)
     load_trips(trips_filename)
+    load_user_trips(user_trips_filename)
+
     load_pinpoints(pinpoints_filename)
     load_tags(tags_filename)
     load_photos(photos_filename)
     load_friends(friends_filename)
-
     # first_user = User(email="user@gmail.com", password="ok")
     # db.session.add(first_user)
     # db.session.commit()
