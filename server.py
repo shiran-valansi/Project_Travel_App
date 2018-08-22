@@ -59,7 +59,8 @@ def log_in_user():
         check_email_and_pw = User.query.filter(User.email==email, User.password==password).first()
 
         if check_email_and_pw:
-            session["current_user"] = email
+            #store user email in session
+            session["email"] = email
             flash("Logged in as %s" % email)
             # return redirect("/users", check_email_and_pw.user_id)#############################
             return redirect("/users/{}".format(check_email_and_pw.user_id))
@@ -125,7 +126,8 @@ def get_user_details(user_id):
 
     # get list of trips for this user based on user id
     current_user = User.query.filter(User.user_id==user_id).first()
-
+    session["fname"]=current_user.fname
+    session["lname"]=current_user.lname
     
     #getting list of friend ids for this user
     friends_id_list = Friend.query.filter(Friend.user_id == user_id).all()
@@ -151,11 +153,46 @@ def index2():
 
 
 
+@app.route('/map-view')
+def show_map():
+    current_trip = Trip.query.filter(Trip.trip_id==session["current_trip_id"]).all()
+
+    return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'], trip=current_trip)
+
+
+
+@app.route('/add-trip', methods=["GET"])
+def add_trip_form():
+    """form to add trip details"""
+
+    return render_template("add-trip.html")
 
 
 
 
+@app.route('/add-trip', methods=["POST"])
+def add_trip():
+    """add trip details to database"""
+    trip_name = request.form.get("trip_name")
+    start_trip = request.form.get("start_trip")
+    end_trip = request.form.get("end_trip")
+    is_public = request.form.get("is_public")
+    if (is_public=='True'):
+        is_public = True
+    else:
+        is_public = False
+    new_trip=Trip(trip_name=trip_name, start_trip=start_trip, end_trip=end_trip, is_public=is_public)
+    db.session.add(new_trip)
+    db.session.commit()
+    session["current_trip_id"]=new_trip.trip_id
+    session["current_trip_name"]=new_trip.trip_name
 
+    # print("*******************************************************")
+    # print("git session trip")
+
+
+    # return redirect("/search/{}".format(trip_name))
+    return redirect("/search")
 
 
 
@@ -167,7 +204,6 @@ def index2():
 
 @app.route("/add-pinpoint", methods=['POST'])
 def add_latlng():
-    print("inn add_latlng")
 
     name= request.form.get("name")
     latlng = request.form.get("latlng")
@@ -186,16 +222,17 @@ def add_latlng():
     rating= request.form.get("rating")
     description= request.form.get("description")
 
+    trip_id= session["current_trip_id"]
 
-#query to see if a pinpoint with the same name exists in the db
-    find_pinpoint = Pinpoint.query.filter_by(lat=lat, lng=lng).first()
+#query to see if a pinpoint with the same position exists in the db
+    find_pinpoint = Pinpoint.query.filter_by(lat=lat, lng=lng, trip_id=trip_id).first()
     
     
   
     if not find_pinpoint:
         # new_pinpoint=Pinpoint(name=name, lat=lat, lng=lng)
 
-        new_pinpoint=Pinpoint(name=name, start=start, end=end, lat=lat, lng=lng, rating=rating, description=description)
+        new_pinpoint=Pinpoint(name=name, trip_id=trip_id, start=start, end=end, lat=lat, lng=lng, rating=rating, description=description)
 
         db.session.add(new_pinpoint)
         db.session.commit()

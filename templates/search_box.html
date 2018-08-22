@@ -20,6 +20,11 @@
 
 {% extends 'base.html' %}
 {% block content %}
+  <h2>Trip Name:&nbsp{{session["current_trip_name"]}}</h2>
+  <p><a href="/calendar-view" >Calendar View</a></p>
+  <p><a href="/map-view" >Map View</a></p>
+  <p><a href="/user_profile" >My Profile</a></p> 
+
 {% include 'modal.html' %}
 <!--   <body>-->  
   <input id="pac-input" class="controls" type="text" placeholder="Search Box">
@@ -59,7 +64,6 @@
 
 <!--     <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initAutocomplete"></script> -->
 
-    
 
     <script>
       // This example adds a search box to a map, using the Google Place Autocomplete
@@ -184,7 +188,7 @@
                     // var contentString = "<h1>" + marker.title + "</h1>"+ 
                     //     "<button id='addMarker'"+i +"class='addButton'>+Add</button>";
 
-                    
+                    // session['title'] = marker.title;
                     // var contentString = "<h1>" + marker.title + "</h1>"+ "<button id='addMarker' class='addButton' onclick='saveMarkerInfo()'>+Add</button>";
                    // var contentString = "<h1>" + marker.title + "</h1>"+ "<button id='addMarker' class='btn btn-primary'  data-toggle='modal' data-target='#exampleModalCenter' >+Add</button>";
                    var contentString = "<h1>" + marker.title + "</h1>"+ "<button id='addMarker' class='btn btn-primary'  data-toggle='modal' data-target='#exampleModalLong' >+Add</button>";
@@ -265,9 +269,7 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initAutocomplete"></script>
 
-<!-- <script src="/static/js/modal.js" ></script> 
- --><!--   </body> -->
-<!-- </html>
- -->
+
 
 {% endblock %}
+

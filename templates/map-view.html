@@ -1,0 +1,35 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>    </h2>
+
+    <div id="map"></div>
+    <!-- Replace the value of the key parameter with your own API key. -->
+    
+    <script>
+        function initMap(var trip) {
+              var myLatLng = {lat: -25.363, lng: 131.044};
+              var pinpoint;
+             
+                var trip_pinpoints = '{{ trip }}';
+
+
+              var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 4,
+                center: myLatLng
+              });
+
+              var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Hello World!'
+              });
+            }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&callback=initMap">
+    </script>
+
+
+{% endblock %}

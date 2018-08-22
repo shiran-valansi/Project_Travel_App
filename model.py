@@ -61,8 +61,6 @@ class Trip(db.Model):
     is_public = db.Column(db.Boolean, default=True,
                                       nullable=False)
 
-    ##############also can datetime be only date?
-
 
     # Defining thae connection to tags through assosiation table trip_tags
     tags = db.relationship("Tag", secondary="trip_tags", backref="trips")
@@ -198,7 +196,7 @@ def connect_to_db(app):
 
     # Configure to use our database.
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres:///travel'
-    app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_ECHO'] = False
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
