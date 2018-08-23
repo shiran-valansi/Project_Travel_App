@@ -9,6 +9,8 @@
     <script>
 
         var markers = [];
+        var infoWindowList = []; 
+
         function initMap() {
             
             var pinpoint;
@@ -57,48 +59,50 @@
                                   description: description
                     }));
 
-
-
                     
 
-                }//enndof for loop
+                }//enndof for pinpoint_list.length loop
 
-                ////////////info window trial-------keeps only info of one pinpoint
+                ////////////info window trial-------
 
-                    for ( let i=0; i<markers.length; i++){
-                    //add content and "Add" button
-
-                        let marker = markers[i];
+                for ( let i=0; i<markers.length; i++){
+                    //go over each marker and make info window with event listener
+                   
+                    let marker = markers[i];
                        
-                   /////the one that works:
-                        // var contentString = "<h1>" + marker.title  + "</h1>"+ "<button id='deleteMarker' class='deleteMarker'>Delete</button>";
-                  ////doesn't work:
-                        // var contentString = "<h1>" + marker.title  + "</h1>"+"<h3>"+ marker.description + "<h3>"+ <button id='deleteMarker' class='deleteMarker'>Delete</button>";
-                        var contentString = "<h1>" + marker.title +":"+ "</h1>"+"<h3>" + marker.description + "</h3>"+ "<button id='deleteMarker' class='deleteMarker'>Delete</button>";
+                /////the one that works:
+                    // var contentString = "<h1>" + marker.title  + "</h1>"+ "<button id='deleteMarker' class='deleteMarker'>Delete</button>";
+                ////doesn't work:
+                    // var contentString = "<h1>" + marker.title  + "</h1>"+"<h3>"+ marker.description + "<h3>"+ <button id='deleteMarker' class='deleteMarker'>Delete</button>";
+                    var contentString = "<h1>" + marker.title + "</h1>"+"<h5>" + marker.description + "</h5>" +"<h5>"+ "rating:" +marker.rating +"</h5>" +"<p>"+ marker.start +"</p>" +"<p>"+ marker.end +"</p>"  +"<button id='deleteMarker' class='deleteMarker'>Delete</button>";
 
-                        var infowindow1 = new google.maps.InfoWindow({
-                              content: contentString,
-                              maxWidth: 200
-                          });
+                    //creating infoWindow
+                    var infowindow1 = new google.maps.InfoWindow({
+                          content: contentString,
+                          maxWidth: 200
+                      });
 
+                    infoWindowList.push(infowindow1);
 
-                        //listening for click on marker
+                    // //listening for click on marker
 
-                        marker.addListener('click', function() {
-                 
-                          infowindow1.open(map, marker);
+                        
+                    marker.addListener('click', function() {
+             
+                        infoWindowList[i].open(map, marker);
 
-                        });
+                    });//close addListener
 
-
-                    }//endof infoWindow trial
+                }//endof infoWindow trial
 
 /////////////////////////////////////////////////////////////////
 
+
+
               });// end of $get  and end of callback function
 
-
-
+                    
+                        
              
             }//end of function init map
     </script>

@@ -187,18 +187,17 @@ def show_map():
 def show_map_pinpoints():
 
     curr_trip_id = session["current_trip_id"]
-    print("got current trip id:")
-    print(curr_trip_id)
+    # print("got current trip id:")
+    # print(curr_trip_id)
     #get the trip with our stored trip id
     current_trip = Trip.query.filter(Trip.trip_id==curr_trip_id).first()
-    print("got current trip query:")
-    print(current_trip.trip_name)
+    # print("got current trip query:")
+    # print(current_trip.trip_name)
     # get list of pinpoints for current trip
     pinpoint_list = current_trip.pinpoints 
     # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==curr_trip_id).all()
 
-    print("got pinpoint list:")
-    print(pinpoint_list[0])
+    # print("got pinpoint list:")
 
     current_trip_name=current_trip.trip_name
     # make a list of pinpoints such that each pinpoint will be a dictionary
