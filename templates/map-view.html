@@ -2,30 +2,105 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>    </h2>
 
     <div id="map"></div>
     <!-- Replace the value of the key parameter with your own API key. -->
     
     <script>
-        function initMap(var trip) {
-              var myLatLng = {lat: -25.363, lng: 131.044};
-              var pinpoint;
+
+        var markers = [];
+        function initMap() {
+            
+            var pinpoint;
+            //get request to get the current trip and list of pinpoints
+            $.get("/map-view-pinpoints", function(trip_info){
+                // go through pinpoint objects list
+                // for each pinpoint:
+                // we have name, lat, lng
+                // put those values into marker
+                // push into markers list
+
+                var pinpoint_list = trip_info["pinpoint_list"];
+
+                //instantiating map with center as first pinpoint in list
+                var myLatLng = {lat: pinpoint_list[0]["lat"], lng: pinpoint_list[0]["lng"]};
+                var map = new google.maps.Map(document.getElementById('map'), {
+                                zoom: 12,
+                                center: myLatLng
+                                });
+
+                //list of pinpoints
+                for (var i=0; i<pinpoint_list.length;i++){
+
+                    var lat = pinpoint_list[i]["lat"]; 
+                    var lng = pinpoint_list[i]["lng"];
+                    var position = {lat:lat, lng:lng};
+                    var name = pinpoint_list[i]["name"];
+                    var start = pinpoint_list[i]["start"];
+                    var end = pinpoint_list[i]["end"];
+                    var rating = pinpoint_list[i]["rating"];
+                    var description = pinpoint_list[i]["description"];
+
+                    // var marker = new google.maps.Marker({
+                    //     position: position,
+                    //     map: map,
+                    //     title: 'Hello World!'
+                    // });
+
+                    markers.push(new google.maps.Marker({
+                                  map: map,
+                                  title: name,
+                                  position: position,
+                                  start: start,
+                                  end: end,
+                                  rating: rating,
+                                  description: description
+                    }));
+
+
+
+                    
+
+                }//enndof for loop
+
+                ////////////info window trial-------keeps only info of one pinpoint
+
+                    for ( let i=0; i<markers.length; i++){
+                    //add content and "Add" button
+
+                        let marker = markers[i];
+                       
+                   /////the one that works:
+                        // var contentString = "<h1>" + marker.title  + "</h1>"+ "<button id='deleteMarker' class='deleteMarker'>Delete</button>";
+                  ////doesn't work:
+                        // var contentString = "<h1>" + marker.title  + "</h1>"+"<h3>"+ marker.description + "<h3>"+ <button id='deleteMarker' class='deleteMarker'>Delete</button>";
+                        var contentString = "<h1>" + marker.title +":"+ "</h1>"+"<h3>" + marker.description + "</h3>"+ "<button id='deleteMarker' class='deleteMarker'>Delete</button>";
+
+                        var infowindow1 = new google.maps.InfoWindow({
+                              content: contentString,
+                              maxWidth: 200
+                          });
+
+
+                        //listening for click on marker
+
+                        marker.addListener('click', function() {
+                 
+                          infowindow1.open(map, marker);
+
+                        });
+
+
+                    }//endof infoWindow trial
+
+/////////////////////////////////////////////////////////////////
+
+              });// end of $get  and end of callback function
+
+
+
              
-                var trip_pinpoints = '{{ trip }}';
-
-
-              var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 4,
-                center: myLatLng
-              });
-
-              var marker = new google.maps.Marker({
-                position: myLatLng,
-                map: map,
-                title: 'Hello World!'
-              });
-            }
+            }//end of function init map
     </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&callback=initMap">

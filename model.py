@@ -43,7 +43,7 @@ class UserTrip(db.Model):
 
     def __repr__(self):
         """Provide representation of User-Trip info"""
-        return f"<UserTrip: user_trip_id= {user_trip_id}, user_id= {user_id}, trip_id= {trip_id}>"
+        return f"<UserTrip: user_trip_id= {self.user_trip_id}, user_id= {self.user_id}, trip_id= {self.trip_id}>"
 
 
 
@@ -67,7 +67,7 @@ class Trip(db.Model):
 
     def __repr__(self):
         """Provide representation of Trip"""
-        return f"<Trip: trip_id= {trip_id}, trip_name= {trip_name}, start_trip= {start_trip}, end_trip= {end_trip}, is_public= {is_public}>"
+        return f"<Trip: trip_id= {self.trip_id}, trip_name= {self.trip_name}, start_trip= {self.start_trip}, end_trip= {self.end_trip}, is_public= {self.is_public}>"
 
 
 
@@ -98,7 +98,7 @@ class Pinpoint(db.Model):
     def __repr__(self):
         """Provide representation of Pinpoint"""
 
-        return f"<Pinpoint: pp_id= {pp_id}, trip_id= {trip_id}, name= {name}, start= {start}, end= {end}, lat= {lat}, lng= {lng}, rating= {rating}, description= {description}"
+        return f"<Pinpoint: pp_id= {self.pp_id}, trip_id= {self.trip_id}, name= {self.name}, start= {self.start}, end= {self.end}, lat= {self.lat}, lng= {self.lng}, rating= {self.rating}, description= {self.description}"
 
 
 class Tag(db.Model):
@@ -112,7 +112,7 @@ class Tag(db.Model):
     """Provide representation of Tag"""
 
     def __repr__(self):
-        return f"<Tag: tag_id= {tag_id}, tag_word= {tag_word}>"
+        return f"<Tag: tag_id= {self.tag_id}, tag_word= {self.tag_word}>"
 
 
 
@@ -134,7 +134,7 @@ class TripTag(db.Model):
     def __repr__(self):
         """Provide representation of TripTag"""
 
-        return f"<TripTag: trip_tag_id= {trip_tag_id}, tag_id= {tag_id}, trip_id= {trip_id}>"
+        return f"<TripTag: trip_tag_id= {self.trip_tag_id}, tag_id= {self.tag_id}, trip_id= {self.trip_id}>"
 
 
 
@@ -160,7 +160,7 @@ class Photo(db.Model):
 
     """Provide representation of Photo"""
     def __repr__(self):
-        return f"<Photo: photo_id= {photo_id}, file_path= {file_path}, file_name= {file_name}, trip_id= {trip_id}, pp_id= {pp_id}>"
+        return f"<Photo: photo_id= {self.photo_id}, file_path= {self.file_path}, file_name= {self.file_name}, trip_id= {self.trip_id}, pp_id= {self.pp_id}>"
 
 
 
@@ -178,7 +178,7 @@ class Friend(db.Model):
    
     """Provide representation of Friend"""
     def __repr__(self):
-        return f"<Friend: user_friend_id= {user_friend_id}, user_id= {user_id}, friend_id= {friend_id}>"
+        return f"<Friend: user_friend_id= {self.user_friend_id}, user_id= {self.user_id}, friend_id= {self.friend_id}>"
 #############################################################
 # Helper functions
 

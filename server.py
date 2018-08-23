@@ -96,7 +96,14 @@ def process_new_user():
         new_user = User(fname=fname, lname=lname, email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
+        session["email"] = new_user.email
+        session["lname"] = new_user.lname
+        session["user_id"] = new_user.user_id
+
         flash("You're now registered!")
+        return redirect("/users/{}".format(new_user.user_id))
+
+
     else:
         flash("You've already registered, please login")
 
@@ -113,6 +120,15 @@ def log_out_user():
     flash("You have been logged out!")
 
     return redirect("/")
+
+
+
+@app.route("/trip/<trip_id>")
+def get_trip_details(trip_id):
+    """gets and shows trip details """
+
+    return "got trip id"
+
 
 
 
@@ -155,9 +171,52 @@ def index2():
 
 @app.route('/map-view')
 def show_map():
-    current_trip = Trip.query.filter(Trip.trip_id==session["current_trip_id"]).all()
+    """ show pinpoints of the current trip on map """
 
-    return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'], trip=current_trip)
+
+    # curr_trip_id = session["current_trip_id"]
+    # current_trip = Trip.query.filter(Trip.trip_id==curr_trip_id).first()
+    # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==curr_trip_id).all()
+
+    # return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'], current_trip=current_trip, pinpoint_list=pinpoint_list)
+    return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'])
+
+
+
+@app.route('/map-view-pinpoints')
+def show_map_pinpoints():
+
+    curr_trip_id = session["current_trip_id"]
+    print("got current trip id:")
+    print(curr_trip_id)
+    #get the trip with our stored trip id
+    current_trip = Trip.query.filter(Trip.trip_id==curr_trip_id).first()
+    print("got current trip query:")
+    print(current_trip.trip_name)
+    # get list of pinpoints for current trip
+    pinpoint_list = current_trip.pinpoints 
+    # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==curr_trip_id).all()
+
+    print("got pinpoint list:")
+    print(pinpoint_list[0])
+
+    current_trip_name=current_trip.trip_name
+    # make a list of pinpoints such that each pinpoint will be a dictionary
+    # of key value pairs, the keys are all columns of the pinpoint table
+    # keys we need: name, start, end, lat, lng, rating, description
+    pinpoint_dict_list = []
+    for pinpoint in pinpoint_list:
+        pinpoint_dict = {"name": pinpoint.name,
+                        "start": pinpoint.start,
+                        "end": pinpoint.end,
+                        "lat": pinpoint.lat,
+                        "lng": pinpoint.lng,
+                        "rating": pinpoint.rating,
+                        "description": pinpoint.description}
+        pinpoint_dict_list.append(pinpoint_dict)
+
+
+    return jsonify({"current_trip_name":[current_trip_name], "pinpoint_list":pinpoint_dict_list})
 
 
 
@@ -187,8 +246,6 @@ def add_trip():
     session["current_trip_id"]=new_trip.trip_id
     session["current_trip_name"]=new_trip.trip_name
 
-    # print("*******************************************************")
-    # print("git session trip")
 
 
     # return redirect("/search/{}".format(trip_name))
@@ -196,15 +253,13 @@ def add_trip():
 
 
 
-# @app.route("/menu")
-# def show_menu():
-#     return render_template("menu.html")
+
 
 
 
 @app.route("/add-pinpoint", methods=['POST'])
 def add_latlng():
-
+    """add pinpoint info to database"""
     name= request.form.get("name")
     latlng = request.form.get("latlng")
     # getting lat lng positions as floats
