@@ -59,8 +59,11 @@ def log_in_user():
         check_email_and_pw = User.query.filter(User.email==email, User.password==password).first()
 
         if check_email_and_pw:
-            #store user email in session
-            session["email"] = email
+            #store user email, first name and id in session
+            session["email"] = check_email_and_pw.email
+            session["fname"] = check_email_and_pw.fname
+            session["current_user_id"] = check_email_and_pw.user_id
+
             flash("Logged in as %s" % email)
             # return redirect("/users", check_email_and_pw.user_id)#############################
             return redirect("/users/{}".format(check_email_and_pw.user_id))
@@ -90,15 +93,16 @@ def process_new_user():
 
     # query the db for user email
     check_email = User.query.filter(User.email==email).first()
-    # check_email = True when there's a record. 
+    # check_email = True when user is in the database. 
 
+    # if user is not in the database- regester them with name, email and password
     if not check_email:
         new_user = User(fname=fname, lname=lname, email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
         session["email"] = new_user.email
-        session["lname"] = new_user.lname
-        session["user_id"] = new_user.user_id
+        session["fname"] = new_user.fname
+        session["current_user_id"] = new_user.user_id
 
         flash("You're now registered!")
         return redirect("/users/{}".format(new_user.user_id))
@@ -123,27 +127,49 @@ def log_out_user():
 
 
 
-@app.route("/trip/<trip_id>")
-def get_trip_details(trip_id):
+@app.route("/trip/<trip_name>")
+def get_trip_details(trip_name):
     """gets and shows trip details """
+    ####################################################
+    # going to work if there's only one unique trip name
+    # need to filter for trip name AND user id, which is already in the session
+    current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
+    #updateing current trip in session - by id and name
+    session["current_trip_name"] = current_trip.trip_name
+    session["current_trip_id"] = current_trip.trip_id
+    return render_template("trip-details.html", trip=current_trip)
 
-    return "got trip id"
 
+
+
+@app.route("/friend-trip/<trip_name>")
+def get_friend_trip_details(trip_name):
+    """gets and shows friend's trip details """
+    ####################################################
+    # going to work if there's only one unique trip name
+    # need to filter for trip name AND user id, which is already in the session
+    current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
+    #updateing current trip in session - by id and name
+    session["current_trip_name"] = current_trip.trip_name
+    session["current_trip_id"] = current_trip.trip_id
+    return render_template("friend-trip-details.html", trip=current_trip)
 
 
 
 @app.route("/users/<user_id>")
-# @app.route("/users")
+# get here from login or register form
 def get_user_details(user_id):
     """Gets and shows details about user."""
     # one way to get list of user trips based on user id
     # current_user = User.query.filter(User.user_id==user_id).first()
     # trips_list=current_user.trips
-
+    user_id = session["current_user_id"]
     # get list of trips for this user based on user id
     current_user = User.query.filter(User.user_id==user_id).first()
-    session["fname"]=current_user.fname
-    session["lname"]=current_user.lname
+    # or:
+    # current_user = User.query.filter(User.user_id==session["user_id"]).first() 
+    # session["fname"]=current_user.fname
+    # session["lname"]=current_user.lname
     
     #getting list of friend ids for this user
     friends_id_list = Friend.query.filter(Friend.user_id == user_id).all()
@@ -154,6 +180,8 @@ def get_user_details(user_id):
         current_friend = User.query.filter(User.user_id==user_id_2).first()
         # friends list is a lis of friends' trips
         friends_list.append(current_friend)
+
+    # session["friends_list"] = friends_list
 
 
     return render_template("user_profile.html", user=current_user, friends_list=friends_list)
@@ -174,10 +202,18 @@ def show_map():
     """ show pinpoints of the current trip on map """
 
 
-    # curr_trip_id = session["current_trip_id"]
-    # current_trip = Trip.query.filter(Trip.trip_id==curr_trip_id).first()
-    # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==curr_trip_id).all()
+    # current_trip_id = session["current_trip_id"]
+    # current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
+    # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==current_trip_id).all()
+    current_trip_id = session["current_trip_id"]
+    current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
+    pinpoint_list = current_trip.pinpoints 
 
+
+    if not pinpoint_list:
+        flash("no pinpoints added to trip yet")
+        return redirect("/search")
+ 
     # return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'], current_trip=current_trip, pinpoint_list=pinpoint_list)
     return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'])
 
@@ -186,18 +222,19 @@ def show_map():
 @app.route('/map-view-pinpoints')
 def show_map_pinpoints():
 
-    curr_trip_id = session["current_trip_id"]
-    # print("got current trip id:")
-    # print(curr_trip_id)
+    current_trip_id = session["current_trip_id"]
+    print("got current trip id:")
+    print(current_trip_id)
     #get the trip with our stored trip id
-    current_trip = Trip.query.filter(Trip.trip_id==curr_trip_id).first()
-    # print("got current trip query:")
-    # print(current_trip.trip_name)
+    current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
+    print("got current trip query:")
+    print(current_trip.trip_name)
     # get list of pinpoints for current trip
     pinpoint_list = current_trip.pinpoints 
-    # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==curr_trip_id).all()
 
-    # print("got pinpoint list:")
+    # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==current_trip_id).all()
+
+    print("got pinpoint list")
 
     current_trip_name=current_trip.trip_name
     # make a list of pinpoints such that each pinpoint will be a dictionary
@@ -244,6 +281,11 @@ def add_trip():
     db.session.commit()
     session["current_trip_id"]=new_trip.trip_id
     session["current_trip_name"]=new_trip.trip_name
+    
+    # connecting the new trip to the cuerrent user through user_trip tableS
+    new_user_trip = UserTrip(user_id=session["current_user_id"], trip_id=session["current_trip_id"])
+    db.session.add(new_user_trip)
+    db.session.commit()
 
 
 
@@ -252,6 +294,10 @@ def add_trip():
 
 
 
+@app.route("/add-pinpoint")
+def go_to_add_pinpoint():
+
+    return redirect("/search")
 
 
 
@@ -298,10 +344,15 @@ def add_latlng():
 
     return "have pinpoint"
 
+
+
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
-    app.debug = True
+    # app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 

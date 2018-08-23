@@ -20,12 +20,18 @@
 
 {% extends 'base.html' %}
 {% block content %}
-  <h2>Trip Name:&nbsp{{session["current_trip_name"]}}</h2>
+  <h2>{{session["current_trip_name"]}}</h2>
   <p><a href="/calendar-view" >Calendar View</a></p>
   <p><a href="/map-view" >Map View</a></p>
-  <p><a href="/user_profile" >My Profile</a></p> 
+  <p><a href="/users/{{session['current_user_id']}}" >My Profile</a></p> 
+  <p><a href="/logout">Log Out</a></p>
 
-{% include 'modal.html' %}
+
+<!--   {% include 'base-menu.html' %}
+ -->
+
+
+  {% include 'modal.html' %}
 <!--   <body>-->  
   <input id="pac-input" class="controls" type="text" placeholder="Search Box">
   <div id="map"></div>

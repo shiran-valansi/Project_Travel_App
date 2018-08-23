@@ -1,8 +1,19 @@
 
 {% extends 'base.html' %}
 {% block content %}
+    <h2>{{session["current_trip_name"]}}</h2>
+
+    
+    <p><a href="/search" >Add places to trip</a></p>
+
+    <p><a href="/calendar-view" >Calendar View</a></p>
+    <p><a href="/users/{{session['current_user_id']}}" >My Profile</a></p> 
+
+    <p><a href="/logout">Log Out</a></p>
 
 
+<!--     {% include 'base-menu.html' %}
+ -->
     <div id="map"></div>
     <!-- Replace the value of the key parameter with your own API key. -->
     
@@ -25,6 +36,8 @@
                 var pinpoint_list = trip_info["pinpoint_list"];
 
                 //instantiating map with center as first pinpoint in list
+
+
                 var myLatLng = {lat: pinpoint_list[0]["lat"], lng: pinpoint_list[0]["lng"]};
                 var map = new google.maps.Map(document.getElementById('map'), {
                                 zoom: 12,
