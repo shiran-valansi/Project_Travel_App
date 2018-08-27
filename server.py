@@ -42,7 +42,6 @@ def show_login_form():
 
 
 
-
 @app.route("/login", methods=["POST"])
 def log_in_user():
     """Checks for email and password in database, then logs in if they match."""
@@ -74,7 +73,6 @@ def log_in_user():
     else:
         flash("Your email is not registered. Please register here!")
         return redirect("/register")
-
 
 
 
@@ -196,6 +194,36 @@ def index2():
     return render_template("search_box.html", key=os.environ['GOOGLE_API_KEY'])
 
 
+#################################################################
+# calendar view
+@app.route("/calendar-view")
+def show_calendar():
+    """ Show pinpoints of current trip on calendar"""
+
+    return render_template("/calendar-view.html")
+
+
+
+@app.route('/calendar-view-pinpoints')
+def show_calendar_pinpoints():
+    print("in function of route calendar view pinpoints")
+
+    current_trip_name, pinpoint_dict_list = get_pinpoints()
+    if not pinpoint_dict_list:
+        flash("no pinpoints added to trip yet")
+        return redirect("/search")
+
+    # make a list of pinpoints such that each pinpoint will be a dictionary
+    # of key value pairs, the keys are all columns of the pinpoint table
+    # keys we need: name, start, end, lat, lng, rating, description
+    
+    return jsonify({"current_trip_name":[current_trip_name], "pinpoint_list":pinpoint_dict_list})
+
+
+
+####################################################################
+
+
 
 @app.route('/map-view')
 def show_map():
@@ -205,14 +233,17 @@ def show_map():
     # current_trip_id = session["current_trip_id"]
     # current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
     # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==current_trip_id).all()
-    current_trip_id = session["current_trip_id"]
-    current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
-    pinpoint_list = current_trip.pinpoints 
+    
+########comment out to put in function get_pinpoints
+    # current_trip_id = session["current_trip_id"]
+    # current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
+    # pinpoint_list = current_trip.pinpoints 
+    # pinpoint_list = get_pinpoints()
 
-
-    if not pinpoint_list:
-        flash("no pinpoints added to trip yet")
-        return redirect("/search")
+    # if there are no pinpoints to this trip yet
+    # if not pinpoint_list:
+    #     flash("no pinpoints added to trip yet")
+    #     return redirect("/search")
  
     # return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'], current_trip=current_trip, pinpoint_list=pinpoint_list)
     return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'])
@@ -222,25 +253,59 @@ def show_map():
 @app.route('/map-view-pinpoints')
 def show_map_pinpoints():
 
-    current_trip_id = session["current_trip_id"]
-    print("got current trip id:")
-    print(current_trip_id)
-    #get the trip with our stored trip id
-    current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
-    print("got current trip query:")
-    print(current_trip.trip_name)
-    # get list of pinpoints for current trip
-    pinpoint_list = current_trip.pinpoints 
+    # current_trip_id = session["current_trip_id"]
+    # print("got current trip id:")
+    # print(current_trip_id)
+    # #get the trip with our stored trip id
+    # current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
+    # print("got current trip query:")
+    # print(current_trip.trip_name)
+    # # get list of pinpoints for current trip
+    # pinpoint_list = current_trip.pinpoints 
 
-    # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==current_trip_id).all()
+    # # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==current_trip_id).all()
 
-    print("got pinpoint list")
+    # print("got pinpoint list")
+    current_trip_name, pinpoint_dict_list = get_pinpoints()
+    
+    if not pinpoint_dict_list:
+        flash("no pinpoints added to trip yet")
+        return redirect("/search")
 
-    current_trip_name=current_trip.trip_name
+    # current_trip_name=current_trip.trip_name
+
+
     # make a list of pinpoints such that each pinpoint will be a dictionary
     # of key value pairs, the keys are all columns of the pinpoint table
     # keys we need: name, start, end, lat, lng, rating, description
+    # pinpoint_dict_list = []
+    # for pinpoint in pinpoint_list:
+    #     pinpoint_dict = {"name": pinpoint.name,
+    #                     "start": pinpoint.start,
+    #                     "end": pinpoint.end,
+    #                     "lat": pinpoint.lat,
+    #                     "lng": pinpoint.lng,
+    #                     "rating": pinpoint.rating,
+    #                     "description": pinpoint.description}
+    #     pinpoint_dict_list.append(pinpoint_dict)
+
+
+    return jsonify({"current_trip_name":[current_trip_name], "pinpoint_list":pinpoint_dict_list})
+
+
+
+def get_pinpoints():
+    """ returns name of trip & list of pinpoints for trip in session""" 
+    
+    current_trip_id = session["current_trip_id"]
+
+    current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
+    pinpoint_list = current_trip.pinpoints 
+    current_trip_name = current_trip.trip_name
+    # make a list of pinpoints where every pinpoint is a dictionary
+    # with keys: name, start, end, etc
     pinpoint_dict_list = []
+
     for pinpoint in pinpoint_list:
         pinpoint_dict = {"name": pinpoint.name,
                         "start": pinpoint.start,
@@ -251,8 +316,7 @@ def show_map_pinpoints():
                         "description": pinpoint.description}
         pinpoint_dict_list.append(pinpoint_dict)
 
-
-    return jsonify({"current_trip_name":[current_trip_name], "pinpoint_list":pinpoint_dict_list})
+    return (current_trip_name, pinpoint_dict_list)
 
 
 
