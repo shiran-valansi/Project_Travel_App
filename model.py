@@ -41,9 +41,12 @@ class UserTrip(db.Model):
                         db.ForeignKey('trips.trip_id'),
                         nullable=False)
 
+    is_admin = db.Column(db.Boolean, nullable=False)
+
+
     def __repr__(self):
         """Provide representation of User-Trip info"""
-        return f"<UserTrip: user_trip_id= {self.user_trip_id}, user_id= {self.user_id}, trip_id= {self.trip_id}>"
+        return f"<UserTrip: user_trip_id= {self.user_trip_id}, user_id= {self.user_id}, trip_id= {self.trip_id}, is_admin= {self.is_admin}>"
 
 
 

@@ -74,10 +74,16 @@ def load_user_trips(user_trips_filename):
 
     for row in open(user_trips_filename):
         row = row.rstrip()
-        user_id, trip_id = row.split(",")
+        user_id, trip_id, is_admin = row.split(",")
+
+        if (is_admin=='1'):
+            is_admin = True
+        else:
+            is_admin = False
         
         user_trip = UserTrip(user_id=user_id,
-                              trip_id=trip_id)
+                              trip_id=trip_id,
+                              is_admin=is_admin)
                     
 
         # We need to add to the session or it won't ever be stored

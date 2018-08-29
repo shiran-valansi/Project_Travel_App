@@ -160,6 +160,40 @@ def get_trip_details(trip_name):
 #     return render_template("friend-trip-details.html", trip=current_trip)
 
 
+##########################################
+# instead of having a page with friends, I will have a following catagory
+# that hastrips instead of friends
+# @app.route("/users/<user_id>")
+# # get here from login or register form
+# def get_user_details(user_id):
+#     """Gets and shows details about user."""
+#     # one way to get list of user trips based on user id
+#     # current_user = User.query.filter(User.user_id==user_id).first()
+#     # trips_list=current_user.trips
+#     user_id = session["current_user_id"]
+#     # get list of trips for this user based on user id
+#     current_user = User.query.filter(User.user_id==user_id).first()
+#     # or:
+#     # current_user = User.query.filter(User.user_id==session["user_id"]).first() 
+#     # session["fname"]=current_user.fname
+#     # session["lname"]=current_user.lname
+    
+#     #getting list of friend ids for this user
+#     friends_id_list = Friend.query.filter(Friend.user_id == user_id).all()
+#     friends_list = []
+#     for friend in friends_id_list:
+#         user_id_2 = friend.friend_id
+#         # getting list of trips of current friend
+#         current_friend = User.query.filter(User.user_id==user_id_2).first()
+#         # friends list is a lis of friends' trips
+#         friends_list.append(current_friend)
+
+#     # session["friends_list"] = friends_list
+
+
+#     return render_template("user_profile.html", user=current_user, friends_list=friends_list)
+ 
+
 
 @app.route("/users/<user_id>")
 # get here from login or register form
@@ -176,21 +210,41 @@ def get_user_details(user_id):
     # session["fname"]=current_user.fname
     # session["lname"]=current_user.lname
     
-    #getting list of friend ids for this user
-    friends_id_list = Friend.query.filter(Friend.user_id == user_id).all()
-    friends_list = []
-    for friend in friends_id_list:
-        user_id_2 = friend.friend_id
-        # getting list of trips of current friend
-        current_friend = User.query.filter(User.user_id==user_id_2).first()
-        # friends list is a lis of friends' trips
-        friends_list.append(current_friend)
+    my_trips=[]
+    followed_trips=[]
 
-    # session["friends_list"] = friends_list
+    # get list of trips by user_id
+    # for each trip check if is_admin true or false
+    # put trips that are true in "my_trips"
+    # trips that are false go in followed trips
+
+    for trip in current_user.trips:
+        print("going over each trip")
+        user_trip = UserTrip.query.filter(UserTrip.user_id==user_id, UserTrip.trip_id==trip.trip_id).first()
+        if user_trip.is_admin:
+            my_trips.append(trip)
+        else:
+            followed_trips.append(trip)
+
+    return render_template("user_profile.html", user=current_user, my_trips=my_trips, followed_trips=followed_trips)
+
+    # #getting list of friend ids for this user
+    # friends_id_list = Friend.query.filter(Friend.user_id == user_id).all()
+    # friends_list = []
+    # for friend in friends_id_list:
+    #     user_id_2 = friend.friend_id
+    #     # getting list of trips of current friend
+    #     current_friend = User.query.filter(User.user_id==user_id_2).first()
+    #     # friends list is a lis of friends' trips
+    #     friends_list.append(current_friend)
+
+    # # session["friends_list"] = friends_list
 
 
-    return render_template("user_profile.html", user=current_user, friends_list=friends_list)
+    # return render_template("user_profile.html", user=current_user, friends_list=friends_list)
  
+
+
 
 
 @app.route("/following")
