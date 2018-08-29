@@ -140,8 +140,10 @@ def get_trip_details(trip_name):
     #updateing current trip in session - by id and name
     session["current_trip_name"] = current_trip.trip_name
     session["current_trip_id"] = current_trip.trip_id
-    return render_template("trip-details.html", trip=current_trip)
+    #changing this to go srtaight to map viiew
+    # return render_template("trip-details.html", trip=current_trip)
 
+    return render_template("map-view.html", trip=current_trip, key=os.environ['GOOGLE_API_KEY'])
 
 
 
