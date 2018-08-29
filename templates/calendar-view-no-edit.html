@@ -16,8 +16,8 @@
     <h2>{{session["current_trip_name"]}}</h2>
 
     <div>
-       <span> <a href="/search" >Add places to trip</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <a href="/map-view" >Map View</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <span> 
+              <a href="/friend-trip-map-view/{{session['current_trip_name']}}">Map View</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <a href="/users/{{session['current_user_id']}}" >My Profile</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <a href="/logout">Log Out</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </span>
@@ -145,8 +145,7 @@
   <div class="wrapper">
   <div class="c-calendar">
     <div class="c-calendar__style c-aside">
-      <!-- <a class="c-add o-btn js-event__add" href="javascript:;">add event <span class="fa fa-plus"></span></a> -->
-      <a class="c-add o-btn " href="search">add destination <span class="fa fa-plus"></span></a>
+      
       <div class="c-aside__day">
         <span class="c-aside__num"></span> <span class="c-aside__month"></span>
       </div>

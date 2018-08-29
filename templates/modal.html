@@ -18,17 +18,16 @@
       <div class="modal-body">
 
 
-
-
             {% include 'pinpoint-form.html' %}
-
 
         
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick='saveMarkerInfo()'>Save changes</button>
-      </div>
+        <button type="button" class="btn btn-primary" onclick="saveMarkerInfo()" >Save changes</button>
+
+<!--         <button type="button" class="btn btn-primary" onclick=saveMarkerInfo({{session['current_trip_name']}})>Save changes</button>
+ -->      </div>
     </div>
   </div>
 </div>

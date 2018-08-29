@@ -130,8 +130,13 @@ def get_trip_details(trip_name):
     """gets and shows trip details """
     ####################################################
     # going to work if there's only one unique trip name
+    user_id=session['current_user_id']
+    print("in trip route. user_id is:")
+    print(user_id)
     # need to filter for trip name AND user id, which is already in the session
+    # current_trip = Trip.query.filter(Trip.trip_name==trip_name, User.user_id==user_id).first()
     current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
+
     #updateing current trip in session - by id and name
     session["current_trip_name"] = current_trip.trip_name
     session["current_trip_id"] = current_trip.trip_id
@@ -140,17 +145,17 @@ def get_trip_details(trip_name):
 
 
 
-@app.route("/friend-trip/<trip_name>")
-def get_friend_trip_details(trip_name):
-    """gets and shows friend's trip details """
-    ####################################################
-    # going to work if there's only one unique trip name
-    # need to filter for trip name AND user id, which is already in the session
-    current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
-    #updateing current trip in session - by id and name
-    session["current_trip_name"] = current_trip.trip_name
-    session["current_trip_id"] = current_trip.trip_id
-    return render_template("friend-trip-details.html", trip=current_trip)
+# @app.route("/friend-trip/<trip_name>")
+# def get_friend_trip_details(trip_name):
+#     """gets and shows friend's trip details """
+#     ####################################################
+#     # going to work if there's only one unique trip name
+#     # need to filter for trip name AND user id, which is already in the session
+#     current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
+#     #updateing current trip in session - by id and name
+#     session["current_trip_name"] = current_trip.trip_name
+#     session["current_trip_id"] = current_trip.trip_id
+#     return render_template("friend-trip-details.html", trip=current_trip)
 
 
 
@@ -183,7 +188,32 @@ def get_user_details(user_id):
 
 
     return render_template("user_profile.html", user=current_user, friends_list=friends_list)
-                            
+ 
+
+
+@app.route("/following")
+def friends_trips():
+    """ render a template with list of users and their trips"""
+    
+    friends_list = get_friends_list(session["current_user_id"])
+    
+    return render_template("following.html", friends_list=friends_list)
+
+
+
+def get_friends_list(user_id):
+    """ return list of friend id's based on user id"""
+    friends_id_list = Friend.query.filter(Friend.user_id == user_id).all()
+    friends_list = []
+    for friend in friends_id_list:
+        user_id_2 = friend.friend_id
+        # getting list of trips of current friend
+        current_friend = User.query.filter(User.user_id==user_id_2).first()
+        # friends list is a lis of friends' trips
+        friends_list.append(current_friend)
+
+    return friends_list
+
 
 
 
@@ -209,6 +239,7 @@ def show_calendar_pinpoints():
     print("in function of route calendar view pinpoints")
 
     current_trip_name, pinpoint_dict_list = get_pinpoints()
+    
     if not pinpoint_dict_list:
         flash("no pinpoints added to trip yet")
         return redirect("/search")
@@ -220,7 +251,11 @@ def show_calendar_pinpoints():
     return jsonify({"current_trip_name":[current_trip_name], "pinpoint_list":pinpoint_dict_list})
 
 
+@app.route("/calendar-view-no-edit")
+def show_calendar_no_edit():
+    """ Show pinpoints of current trip on calendar without edit option"""
 
+    return render_template("/calendar-view-no-edit.html")
 ####################################################################
 
 
@@ -291,6 +326,53 @@ def show_map_pinpoints():
 
 
     return jsonify({"current_trip_name":[current_trip_name], "pinpoint_list":pinpoint_dict_list})
+
+
+
+@app.route("/friend-trip-map-view/<trip_name>")
+def get_friend_trip_details(trip_name):
+    """gets and shows friend's trip details """
+    ####################################################
+    # going to work if there's only one unique trip name
+    # need to filter for trip name AND user id, which is already in the session
+    current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
+    #updateing current trip in session - by id and name
+    session["current_trip_name"] = current_trip.trip_name
+    session["current_trip_id"] = current_trip.trip_id
+    return render_template("map-view-no-edit.html", trip = current_trip, key=os.environ['GOOGLE_API_KEY'])
+
+
+
+
+
+
+#commented out  @app.route('/map-view-no-edit') and @app.route("/friend-trip/<trip_name>")
+########################################################
+# @app.route('/map-view-no-edit')
+# def show_map_no_edit():
+#     """ show pinpoints of the current trip on map """
+
+
+#     # current_trip_id = session["current_trip_id"]
+#     # current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
+#     # pinpoint_list = Pinpoint.query.filter(Trip.trip_id==current_trip_id).all()
+    
+# ########comment out to put in function get_pinpoints
+#     # current_trip_id = session["current_trip_id"]
+#     # current_trip = Trip.query.filter(Trip.trip_id==current_trip_id).first()
+#     # pinpoint_list = current_trip.pinpoints 
+#     # pinpoint_list = get_pinpoints()
+
+#     # if there are no pinpoints to this trip yet
+#     # if not pinpoint_list:
+#     #     flash("no pinpoints added to trip yet")
+#     #     return redirect("/search")
+ 
+#     # return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'], current_trip=current_trip, pinpoint_list=pinpoint_list)
+#     return render_template("map-view.html", key=os.environ['GOOGLE_API_KEY'])
+
+
+
 
 
 
@@ -366,47 +448,123 @@ def go_to_add_pinpoint():
 
 
 
-@app.route("/add-pinpoint", methods=['POST'])
-def add_latlng():
-    """add pinpoint info to database"""
-    name= request.form.get("name")
-    latlng = request.form.get("latlng")
-    # getting lat lng positions as floats
-    latlng = latlng.strip(" ")
-    latlng = latlng.strip("(")
-    latlng = latlng.strip(")")
-    latlng = latlng.split(",")
-    lat = float(latlng[0])
-    lng = float(latlng[1])
+# @app.route("/add-pinpoint", methods=['POST'])
+# def add_latlng():
+#     """add pinpoint info to database"""
 
-    start= request.form.get("start")
-    # print("this is start:")
-    # print(start)
-    end= request.form.get("end")
-    rating= request.form.get("rating")
-    description= request.form.get("description")
+#     name = request.form.get("name")
+#     latlng = request.form.get("latlng")
+#     # getting lat lng positions as floats
+#     latlng = latlng.strip(" ")
+#     latlng = latlng.strip("(")
+#     latlng = latlng.strip(")")
+#     latlng = latlng.split(",")
+#     lat = float(latlng[0])
+#     lng = float(latlng[1])
 
-    trip_id= session["current_trip_id"]
+#     start = request.form.get("start")
+#     # print("this is start:")
+#     # print(start)
+#     end = request.form.get("end")
+#     rating = request.form.get("rating")
+#     description = request.form.get("description")
 
-#query to see if a pinpoint with the same position exists in the db
-    find_pinpoint = Pinpoint.query.filter_by(lat=lat, lng=lng, trip_id=trip_id).first()
+#     trip_id = session["current_trip_id"]
+    
+
+
+# #query to see if a pinpoint with the same position exists in the db
+#     find_pinpoint = Pinpoint.query.filter_by(lat=lat, lng=lng, trip_id=trip_id).first()
     
     
   
-    if not find_pinpoint:
-        # new_pinpoint=Pinpoint(name=name, lat=lat, lng=lng)
+#     if not find_pinpoint:
+#         # new_pinpoint=Pinpoint(name=name, lat=lat, lng=lng)
 
-        new_pinpoint=Pinpoint(name=name, trip_id=trip_id, start=start, end=end, lat=lat, lng=lng, rating=rating, description=description)
+#         new_pinpoint=Pinpoint(name=name, trip_id=trip_id, start=start, end=end, lat=lat, lng=lng, rating=rating, description=description)
 
-        db.session.add(new_pinpoint)
-        db.session.commit()
+#         db.session.add(new_pinpoint)
+#         db.session.commit()
+#     else:
+#         #overwriting existing pinpoint
+
+
+#         # # flash message not working
+#         # flash("pinpoint already exists")
+
+
+#     return "have pinpoint"
+
+
+@app.route("/add-pinpoint", methods=['POST'])
+def add_latlng():
+    """add pinpoint info to database"""
+
+    name = request.form.get("name")
+    start = request.form.get("start")
+    end = request.form.get("end")
+    rating = request.form.get("rating")
+    description = request.form.get("description")
+    # this is true if the pinpoint exists in the database and we are just editing it
+    # false if this is a new pinpoint to add to db
+    if_exists = request.form.get("if_exists")
+
+    trip_id = session["current_trip_id"]
+    # print("this is if_exists")
+    # print(if_exists)
+    # query to find pinpoint in database by pinpoint name and trip id
+    find_pinpoint = Pinpoint.query.filter_by(name=name, trip_id=trip_id).first()
+
+    if if_exists==True: # we are editing an existing pinpoint
+        #overwriting existing pinpoint
+        # find_pinpoint = Pinpoint.query.filter_by(name=name, trip_id=trip_id).first()
+        # print("find pinpoint is:")
+        # print(find_pinpoint)
+        # overwrite data in database for this pinpoint
+        find_pinpoint.start = start
+        find_pinpoint.end = end
+        find_pinpoint.rating = rating
+        find_pinpoint.description = description
+        # db.session.commit()
     else:
+        # find_pinpoint = Pinpoint.query.filter_by(name=name, trip_id=trip_id).first()
 
-        # flash message not working
-        flash("pinpoint already exists")
+        if find_pinpoint==None: # If pinpoint is not in database, make new pinpoint
+            latlng = request.form.get("latlng")
+            # getting lat lng positions as floats
+            latlng = latlng.strip(" ")
+            latlng = latlng.strip("(")
+            latlng = latlng.strip(")")
+            latlng = latlng.split(",")
+            lat = float(latlng[0])
+            lng = float(latlng[1])
 
+            new_pinpoint=Pinpoint(name=name, trip_id=trip_id, start=start, end=end, lat=lat, lng=lng, rating=rating, description=description)
+
+            db.session.add(new_pinpoint)
+            # db.session.commit()
+        else: # pinpoint is in database, but we are still in the search page
+            # this is still saving pinpoint twice in defferent pp-id's
+
+            find_pinpoint.start = start
+            find_pinpoint.end = end
+            find_pinpoint.rating = rating
+            find_pinpoint.description = description
+            
+    db.session.commit()
 
     return "have pinpoint"
+
+
+@app.route("/explore")
+def explore_trips():
+    """ render a template with list of users and their trips"""
+    # get list of users with public profiles
+    all_users_list = User.query.filter().group_by(User.user_id).all()
+    print("got users list")
+    print (all_users_list[0])
+    return render_template("explore.html", all_users_list=all_users_list)
+
 
 
 

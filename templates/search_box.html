@@ -22,7 +22,7 @@
 {% block content %}
   <h2>{{session["current_trip_name"]}}</h2>
   <p><a href="/calendar-view" >Calendar View</a></p>
-  <p><a href="/map-view" >Map View</a></p>
+  <p><a href="/map-view">Map View</a></p>
   <p><a href="/users/{{session['current_user_id']}}" >My Profile</a></p> 
   <p><a href="/logout">Log Out</a></p>
 
@@ -141,11 +141,10 @@
               }
 
               // Clear out the old markers.
-              ///////commenting out in order to save marker
-              // markers.forEach(function(marker) {
-              //   marker.setMap(null);
-              // });
-              // markers = [];
+              markers.forEach(function(marker) {
+                marker.setMap(null);
+              });
+              markers = [];
 
               // For each place, get the icon, name and location.
               var bounds = new google.maps.LatLngBounds();
@@ -174,7 +173,25 @@
                   }));
 
                   console.log("just pushed in marker");
+                  //tried this but didnt work
                   
+                  // marker = new google.maps.Marker({
+                  //         map: map,
+                  //         icon: icon,
+                  //         title: place.name,
+                  //         position: place.geometry.location
+                  //     });
+                  // // Create a marker for each place.
+                  // marker.addListener('add_marker', function() {
+
+                  //     markers.push(marker);
+
+                  //     console.log("just pushed in marker");
+                  //   });
+
+
+
+
                   if (place.geometry.viewport) {
                     // Only geocodes have viewport.
                       bounds.union(place.geometry.viewport);
@@ -257,9 +274,9 @@
             var rating = document.getElementById("rating").value;
             var description = document.getElementById("description").value;
 
-
+            var if_exists = false;
             var place = {"name": name, "start": start,
-            "end":end, "latlng": latlng, "rating": rating, "description":description}; 
+            "end":end, "latlng": latlng, "rating": rating, "description":description, "if_exists":if_exists}; 
           
             
             // $.post("/add-pinpoint", {"name": name}, resultFunc);
@@ -270,7 +287,9 @@
 
     function resultFunc(result){
       console.log("in resultFunc");
-      alert(result);
+      $('#exampleModalLong').modal('hide')
+
+      // alert(result);
     }
 
     </script>

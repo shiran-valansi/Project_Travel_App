@@ -33,7 +33,7 @@ today = year + "-" + month + "-" + day;
 
 
 // ------ set default events -------
-// change this to get pinpoint data from the database based on trip id
+// changed this to get pinpoint data from the database based on trip id
 function defaultEvents(dataDay,dataName,dataNotes,classTag){
   var date = $('*[data-day='+dataDay+']');
   date.attr("data-name", dataName);
@@ -64,8 +64,7 @@ function getPinpoints(){
         //                 });
 
         //list of pinpoints
-        console.log("the length of the list");
-        console.log(pinpoint_list.length);
+ 
         for (var i=0; i<pinpoint_list.length;i++){
 
             // var lat = pinpoint_list[i]["lat"]; 
@@ -73,22 +72,21 @@ function getPinpoints(){
             // var position = {lat:lat, lng:lng};
             var name = pinpoint_list[i]["name"];
             var start = pinpoint_list[i]["start"];
-            console.log("initial start:");
-            console.log(start);
+            // console.log("initial start:");
+            // console.log(start);
 
             start = start.slice(5,16);
-            console.log("after slice start:");
-            console.log(start);
+          
             var month = start.slice(3,6);
             var month_num = monthToNumber(month);
-            console.log(" month number:");
-            console.log(month_num);
+            // console.log(" month number:");
+            // console.log(month_num);
 
             var year = start.slice(7,11);
             var day = start.slice(0,2);
             var date = year +"-"+ month_num + "-" + day;
-            console.log("the final date:");
-            console.log(date);
+            // console.log("the final date:");
+            // console.log(date);
             var end = pinpoint_list[i]["end"];
             var rating = pinpoint_list[i]["rating"];
             var description = pinpoint_list[i]["description"];
@@ -173,6 +171,8 @@ saveBtn.on("click", function() {
   $("#addEvent")[0].reset();
 });//endof saveBtn function
 
+////***************************************************************
+//what shows the events on the side
 //fill sidebar event info
 function fillEventSidebar(self) {
   $(".c-aside__event").remove();
@@ -323,7 +323,17 @@ function monthToNumber(month){
   var month_num;
   if (month == "Jan"){ month_num = "01"}
     else if (month == "Feb") {month_num = "02"}
-      else if (month == "Aug") {month_num = "08"}
+      else if (month == "Mar") {month_num = "03"}
+        else if (month == "Apr") {month_num = "04"}
+          else if (month == "May") {month_num = "05"}
+            else if (month == "Jun") {month_num = "06"}
+              else if (month == "Jul") {month_num = "07"}
+                else if (month == "Aug") {month_num = "08"}
+                  else if (month == "Sep") {month_num = "09"}
+                    else if (month == "Oct") {month_num = "10"}
+                      else if (month == "Nov") {month_num = "11"}
+                        else if (month == "Dec") {month_num = "12"}
+
   return month_num;
 
 }

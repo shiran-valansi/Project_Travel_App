@@ -4,9 +4,7 @@
     <h2>{{session["current_trip_name"]}}</h2>
 
     
-    <p><a href="/search" >Add places to trip</a></p>
-
-    <p><a href="/calendar-view" >Calendar View</a></p>
+    <p><a href="/calendar-view-no-edit">Calendar View</a></p>
     <p><a href="/users/{{session['current_user_id']}}" >My Profile</a></p> 
 
     <p><a href="/logout">Log Out</a></p>
@@ -97,9 +95,7 @@
                     //trying data attribute- added data-title to edit button
                     // var contentString = '<h1>' + marker.title + '</h1>'+'<h5>' + marker.description + '</h5>' +'<h5>'+ 'rating:' +marker.rating +'</h5>' +'<p>'+ marker.start +'</p>' +'<p>'+ marker.end +'</p>'  + '<button id="deleteMarker" class="deleteMarker"> Delete </button>' + "<button id='addMarker'  data-title=" + marker.title + 'class="btn btn-primary"  data-toggle="modal" data-target="#exampleModalLong" >Edit</button>';
 
-                    var contentString = '<h1>' + marker.title + '</h1>'+'<h5>' + marker.description + '</h5>' +'<h5>'+ 'rating:' +marker.rating +'</h5>' +'<p>'+ marker.start +'</p>' +'<p>'+ marker.end +'</p>'  + 
-                        '<button id="deleteMarker" class="deleteMarker"> Delete </button>' + 
-                        '<button id="addMarker"  data-title="' + marker.title + '"class="btn btn-primary"  data-position=" '+ marker.position+ '"  data-toggle="modal" data-target="#exampleModalLong" >Edit</button>"';
+                    var contentString = '<h1>' + marker.title + '</h1>'+'<h5>' + marker.description + '</h5>' +'<h5>'+ 'rating:' +marker.rating +'</h5>' +'<p>'+ marker.start +'</p>' +'<p>'+ marker.end +'</p>';
 
                     //adding extra quotations around + marker.title + made this work
 //example of quotations:
@@ -150,6 +146,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&callback=initMap">
     </script>
 
-    <script  src="static/js/helper-functions.js"></script>
+    <script  src="/static/js/helper-functions.js"></script>
 
 {% endblock %}

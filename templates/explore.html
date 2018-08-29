@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<ul>
+    <h5>Hi {{ session['fname'] }}!</h5>
+</ul>
+
+
+<!-- go through all users and list their trips
+have option of joining trip/copying trip -->
+<h2>Users</h2>
+<ul>{% for user in all_users_list %}
+       {% if user.user_id != session['current_user_id']%}
+           <li> {{user.fname}}&nbsp{{user.lname}}:</li>
+           {%for trip in user.trips%}
+                <ul><li><a href="/friend-trip-map-view/{{ trip.trip_name }}" >{{ trip.trip_name }}</a></li></ul>  
+            {%endfor%}
+        {% endif %}  
+    {% endfor %}
+</ul>
+
+<br>
+
+<h2><p><a href="/users/{{session['current_user_id']}}" >My Profile</a></p></h2> 
+
+<br>
+
+
+<h5><a href="/logout">Log Out</a></h5>
+
+{% endblock %}
