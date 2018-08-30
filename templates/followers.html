@@ -1,0 +1,58 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<!--     <script  src="static/js/helper-functions.js"></script>
+ -->
+    <h3>Hi {{ session['fname'] }}!</h3>
+    <h2>{{session["current_trip_name"]}}</h2>
+    <div> 
+        <a href="/map-view" >Map View</a>&nbsp&nbsp&nbsp&nbsp
+        <a href="/calendar-view" >Calendar View</a>&nbsp&nbsp&nbsp&nbsp
+        <a href="/users/{{session['current_user_id']}}" >My Profile</a>&nbsp&nbsp&nbsp&nbsp
+        <a href="/logout">Log Out</a>
+    </div>
+<br><br>
+    <div>
+        Other Trip Admins:
+        {% if admin_list %}
+            <ul>
+                {% for admin in admin_list%}
+                    {%if admin.user_id!=session["current_user_id"]%}
+                        <a href="/user-friend/{{admin.user_id}}" >{{admin.fname}}&nbsp{{admin.lname}}</a>
+                    {%endif%}
+                    
+                {%endfor%}
+            </ul>
+        {% else %}
+            <p>No admins! Weird, right?</p>
+        {%endif%}
+    </div>  
+
+    <div>
+        Trip Followers:
+        {% if not(followers_list)%}
+            <p>No followers yet</p>
+        {%else%}
+            <ul>
+                {% for follower in followers_list%}
+                    {%if follower.user_id!=session["current_user_id"]%}
+
+                        <a href="/user-friend/{{follower.user_id}}" >{{follower.fname}}&nbsp{{follower.lname}}
+                        </a>
+                    {%elif follower.user_id == session["current_user_id"]%}
+
+                        <a href="/users/{{follower.user_id}}" >Me
+                        </a>
+                    {%endif%}
+                {%endfor%}
+            </ul>
+        
+        {%endif%}
+        
+    </div>
+
+    
+
+
+
+{% endblock %}

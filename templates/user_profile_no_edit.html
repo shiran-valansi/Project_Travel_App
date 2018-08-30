@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<ul>
+    <h5>Hi {{ session['fname'] }}!</h5>
+</ul>
+<!-- not the right condition
+I need to check if I am an admin of this trip -->
+<h2>{{user.fname}}&nbsp{{user.lname}}`s Trips</h2>
+<ul>{% for trip in user_trips %}
+        {%if trip.trip_id in session["my_trip_ids"]%}
+            <li><a href="/trip/{{trip.trip_name}}" >{{trip.trip_name}}</a></li>
+        {%else%}
+            <li><a href="/friend-trip-map-view/{{trip.trip_name}}">{{trip.trip_name}}</a></li>
+        {%endif%}
+        
+    {% endfor %}
+</ul>
+
+
+<h2>Following</h2>
+<ul>{% for trip in followed_trips %}
+        {%if trip.trip_id in session["my_trip_ids"]%}
+            <li><a href="/trip/{{trip.trip_name}}" >{{trip.trip_name}}</a></li>
+
+        {%else%}
+            <li><a href="/friend-trip-map-view/{{trip.trip_name}}">{{trip.trip_name}}</a></li>
+        {%endif%}
+
+
+    {% endfor %}
+</ul>
+
+<br>
+<h5><a href="/logout">Log Out</a></h5>
+
+{% endblock %}
+
+

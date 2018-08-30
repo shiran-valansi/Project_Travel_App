@@ -123,6 +123,31 @@ def log_out_user():
 
     return redirect("/")
 
+##################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#bug- dont know why i'm not if followers of china when I go to China->followers
+
+@app.route("/followers")
+def get_followers():
+    """show all followers andadmins of trip"""
+    
+    user_id=session['current_user_id']
+    admin_list = []
+    followers_list = []
+    user_trips = UserTrip.query.filter(UserTrip.trip_id==session["current_trip_id"]).all()
+    for row in user_trips:
+        user = User.query.filter(User.user_id == row.user_id).first()
+        #if row.user_id!=user_id: #all users exept for current user
+        if row.is_admin: 
+            admin_list.append(user)
+        else:
+            followers_list.append(user)
+    print("admin list:")
+    print(admin_list)
+    print("followers list:")
+    print(followers_list)
+    return render_template("followers.html", followers_list=followers_list, admin_list=admin_list)
+
+
 
 
 @app.route("/trip/<trip_name>")
@@ -131,8 +156,7 @@ def get_trip_details(trip_name):
     ####################################################
     # going to work if there's only one unique trip name
     user_id=session['current_user_id']
-    print("in trip route. user_id is:")
-    print(user_id)
+
     # need to filter for trip name AND user id, which is already in the session
     # current_trip = Trip.query.filter(Trip.trip_name==trip_name, User.user_id==user_id).first()
     current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
@@ -142,6 +166,21 @@ def get_trip_details(trip_name):
     session["current_trip_id"] = current_trip.trip_id
     #changing this to go srtaight to map viiew
     # return render_template("trip-details.html", trip=current_trip)
+    
+    # for every trip get a list of followers and admins
+    # the admin list will not include current user
+    # admin_list = []
+    # followers_list = []
+    # get list of all users that are admins or following this trip
+    # user_trips = UserTrip.query.filter(UserTrip.trip_id==current_trip.trip_id).all()
+    # for row in user_trips:
+    #     user = User.query.filter(User.user_id == row.user_id).first()
+    #     if row.user_id!=user_id: #all users exept for current user
+    #         if row.is_admin: # if admin
+    #             admin_list.append(user)
+    #         else:
+    #             followers_list.append(user)
+    
 
     return render_template("map-view.html", trip=current_trip, key=os.environ['GOOGLE_API_KEY'])
 
@@ -194,6 +233,34 @@ def get_trip_details(trip_name):
 #     return render_template("user_profile.html", user=current_user, friends_list=friends_list)
  
 
+@app.route("/user-friend/<user_id>")
+# get here from my trip page
+def get_friend_details(user_id):
+    """Gets and shows details about user that's not current user."""
+
+    # get list of trips for this user based on user id
+    current_user = User.query.filter(User.user_id==user_id).first()
+
+    
+    user_trips=[]
+    followed_trips=[]
+
+    # get list of trips by user_id
+    # for each trip check if is_admin true or false
+    # put trips that are true in "my_trips"
+    # trips that are false go in followed trips
+
+    for trip in current_user.trips:
+        print("going over each trip")
+        user_trip = UserTrip.query.filter(UserTrip.user_id==user_id, UserTrip.trip_id==trip.trip_id).first()
+        if user_trip.is_admin:
+            user_trips.append(trip)
+        else:
+            followed_trips.append(trip)
+
+    return render_template("user_profile_no_edit.html", user=current_user, user_trips=user_trips, followed_trips=followed_trips)
+
+
 
 @app.route("/users/<user_id>")
 # get here from login or register form
@@ -211,6 +278,7 @@ def get_user_details(user_id):
     # session["lname"]=current_user.lname
     
     my_trips=[]
+    my_trip_ids = []
     followed_trips=[]
 
     # get list of trips by user_id
@@ -223,8 +291,15 @@ def get_user_details(user_id):
         user_trip = UserTrip.query.filter(UserTrip.user_id==user_id, UserTrip.trip_id==trip.trip_id).first()
         if user_trip.is_admin:
             my_trips.append(trip)
+            my_trip_ids.append(trip.trip_id)
         else:
             followed_trips.append(trip)
+
+
+    my_trip_ids = tuple(my_trip_ids)
+    session["my_trip_ids"] = my_trip_ids
+    # print("session###############")
+    # print(session["my_trip_ids"])
 
     return render_template("user_profile.html", user=current_user, my_trips=my_trips, followed_trips=followed_trips)
 
@@ -430,8 +505,6 @@ def get_friend_trip_details(trip_name):
 
 
 
-
-
 def get_pinpoints():
     """ returns name of trip & list of pinpoints for trip in session""" 
     
@@ -478,6 +551,7 @@ def add_trip():
         is_public = True
     else:
         is_public = False
+    is_admin = True 
     new_trip=Trip(trip_name=trip_name, start_trip=start_trip, end_trip=end_trip, is_public=is_public)
     db.session.add(new_trip)
     db.session.commit()
@@ -485,7 +559,7 @@ def add_trip():
     session["current_trip_name"]=new_trip.trip_name
     
     # connecting the new trip to the cuerrent user through user_trip tableS
-    new_user_trip = UserTrip(user_id=session["current_user_id"], trip_id=session["current_trip_id"])
+    new_user_trip = UserTrip(user_id=session["current_user_id"], trip_id=session["current_trip_id"], is_admin=is_admin)
     db.session.add(new_user_trip)
     db.session.commit()
 
