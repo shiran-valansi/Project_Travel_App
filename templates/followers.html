@@ -11,17 +11,26 @@
         <a href="/users/{{session['current_user_id']}}" >My Profile</a>&nbsp&nbsp&nbsp&nbsp
         <a href="/logout">Log Out</a>
     </div>
-<br><br>
+    <br><br>
     <div>
+        <h4>Followers</h4>
         Other Trip Admins:
+       <!--  if there are no admins at all -->
         {% if admin_list %}
             <ul>
-                {% for admin in admin_list%}
-                    {%if admin.user_id!=session["current_user_id"]%}
-                        <a href="/user-friend/{{admin.user_id}}" >{{admin.fname}}&nbsp{{admin.lname}}</a>
+                
+                    {% for admin in admin_list%}
+                    
+                        {%if admin.user_id!=session["current_user_id"]%}
+                           <li> <a href="/user-friend/{{admin.user_id}}" >{{admin.fname}}&nbsp{{admin.lname}}</a></li>
+                        {%endif%}
+                    {%endfor%}
+
+                    {%if admin_list|length ==1%}
+                        <li><a href="/users/{{session['current_user_id']}}" >Only Me</a> </li>
                     {%endif%}
                     
-                {%endfor%}
+               
             </ul>
         {% else %}
             <p>No admins! Weird, right?</p>
@@ -29,29 +38,71 @@
     </div>  
 
     <div>
+
+
         Trip Followers:
         {% if not(followers_list)%}
-            <p>No followers yet</p>
+            <p>No followers </p>
         {%else%}
             <ul>
+
                 {% for follower in followers_list%}
                     {%if follower.user_id!=session["current_user_id"]%}
 
-                        <a href="/user-friend/{{follower.user_id}}" >{{follower.fname}}&nbsp{{follower.lname}}
-                        </a>
-                    {%elif follower.user_id == session["current_user_id"]%}
+                        {%if session["current_trip_id"] in session["my_trip_ids"] %}
+                            
+                                <p>
+                                    <li>
+                                        <a href="/user-friend/{{follower.user_id}}" >{{follower.fname}}&nbsp{{follower.lname}}</a>&nbsp&nbsp
+                                        <form action="/make-admin" method="POST">
+                                    
+                                            <input type="hidden" name="follower_id" value="{{follower.user_id}}">
+                                            <input type="submit" value="Make Admin">
+                                    
+                                        </form>
+                                    </li>
+                                </p>
+                            
 
-                        <a href="/users/{{follower.user_id}}" >Me
-                        </a>
+                        {%else%}
+                            <li><a href="/user-friend/{{follower.user_id}}" >{{follower.fname}}&nbsp{{follower.lname}}</a></li>
+
+                        {%endif%}
+
+                        
+                    {% elif follower.user_id == session["current_user_id"]%}
+
+                        <li><a href="/users/{{follower.user_id}}" >Me
+                        </a></li>
                     {%endif%}
+
                 {%endfor%}
             </ul>
         
         {%endif%}
         
     </div>
+    <br><br>  
+    <!-- if I am not an admin or a follower
+    show button/hidden form to "follow this trip"
+    the form will submit to make-follower route -->
+    {% if not session["current_trip_id"] in session["my_trip_ids"] and not session["current_user_id"] in followers_id_list %}
+                     
+        <p>
+            {{session["current_trip_id"]}}
+            {{session["my_trip_ids"]}}  
+               {{followers_list}} 
+                <form action="/make-follower" method="POST">
+            
+                    <input type="submit" value="Follow this trip">
+            
+                </form>
+        </p>
+                            
+          
 
-    
+                
+    {% endif %}
 
 
 

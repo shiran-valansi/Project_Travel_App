@@ -292,6 +292,16 @@
       // alert(result);
     }
 
+
+
+      // go over all open info windows and close them after saving modal info*************************************
+      function closeOthernIfoWindows(map){
+
+          infoWindowList.forEach(function(window) {
+              window.close(map, window);
+
+      });
+      }
     </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initAutocomplete"></script>

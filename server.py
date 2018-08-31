@@ -133,20 +133,64 @@ def get_followers():
     user_id=session['current_user_id']
     admin_list = []
     followers_list = []
+    followers_id_list = []
     user_trips = UserTrip.query.filter(UserTrip.trip_id==session["current_trip_id"]).all()
     for row in user_trips:
         user = User.query.filter(User.user_id == row.user_id).first()
+        # print("this is user")
+        # print(user.fname)
         #if row.user_id!=user_id: #all users exept for current user
         if row.is_admin: 
             admin_list.append(user)
         else:
             followers_list.append(user)
+            followers_id_list.append(user.user_id)
     print("admin list:")
     print(admin_list)
     print("followers list:")
     print(followers_list)
-    return render_template("followers.html", followers_list=followers_list, admin_list=admin_list)
+    return render_template("followers.html", followers_list=followers_list, followers_id_list=followers_id_list, admin_list=admin_list)
 
+
+
+@app.route("/make-admin", methods=['POST'])
+def make_admin():
+    """takes in a user who is a follower and makes them an admin"""
+    #makerequest to get information about trip and user from form
+    # make query to get row in user-trips table
+    # change is_admin in that row
+    # add and commit to database
+    # redirect to followers route
+    current_trip_id=session["current_trip_id"]
+    user_id = request.form.get("follower_id")
+    print("making query to db")
+    user_trip = UserTrip.query.filter(UserTrip.user_id==user_id, UserTrip.trip_id==current_trip_id).first()
+    print(user_trip.is_admin)
+    user_trip.is_admin = True 
+    print(user_trip.is_admin)
+    db.session.add(user_trip)
+    db.session.commit()
+    return redirect("/followers")
+
+
+
+@app.route("/make-follower", methods=['POST'])
+def make_follower():
+    """makes user a follower of trip"""
+    #make request to get information about trip and user from form
+    # make query to get row in user-trips table
+    # change is_admin in that row
+    # add and commit to database
+    # redirect to followers route
+    current_trip_id=session["current_trip_id"]
+    user_id = session["current_user_id"]
+    # print("making query to db")
+
+    new_user_trip = UserTrip(user_id=user_id, trip_id=current_trip_id, is_admin=False)
+  
+    db.session.add(new_user_trip)
+    db.session.commit()
+    return redirect("/followers")
 
 
 
@@ -277,9 +321,9 @@ def get_user_details(user_id):
     # session["fname"]=current_user.fname
     # session["lname"]=current_user.lname
     
-    my_trips=[]
+    my_trips=[] #trips where current user is admin
     my_trip_ids = []
-    followed_trips=[]
+    followed_trips=[]# trips that current user follows
 
     # get list of trips by user_id
     # for each trip check if is_admin true or false

@@ -120,7 +120,7 @@
                     // listening for click on marker
                     marker.addListener('click', function() {
                         // when clicking on marker, close all open info windows
-                        closeOtherOnfoWindows(map);
+                        closeOtherInfoWindows(map);
              
                         infoWindowList[i].open(map, marker);
                         $('#pinpoint-title').text(marker.title);
@@ -136,7 +136,7 @@
               });// end of $get and end of callback function
 
             // go over all open info windows and close them
-            function closeOtherOnfoWindows(map){
+            function closeOthernIfoWindows(map){
 
                 infoWindowList.forEach(function(window) {
                     window.close(map, window);
