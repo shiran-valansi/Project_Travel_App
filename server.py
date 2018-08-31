@@ -132,6 +132,7 @@ def get_followers():
     
     user_id=session['current_user_id']
     admin_list = []
+    admin_id_list = []
     followers_list = []
     followers_id_list = []
     user_trips = UserTrip.query.filter(UserTrip.trip_id==session["current_trip_id"]).all()
@@ -142,14 +143,15 @@ def get_followers():
         #if row.user_id!=user_id: #all users exept for current user
         if row.is_admin: 
             admin_list.append(user)
+            admin_id_list.append(user.user_id)
         else:
             followers_list.append(user)
             followers_id_list.append(user.user_id)
-    print("admin list:")
-    print(admin_list)
-    print("followers list:")
-    print(followers_list)
-    return render_template("followers.html", followers_list=followers_list, followers_id_list=followers_id_list, admin_list=admin_list)
+    # print("admin list:")
+    # print(admin_list)
+    # print("followers list:")
+    # print(followers_list)
+    return render_template("followers.html", followers_list=followers_list, followers_id_list=followers_id_list, admin_list=admin_list, admin_id_list=admin_id_list)
 
 
 
@@ -189,6 +191,59 @@ def make_follower():
     new_user_trip = UserTrip(user_id=user_id, trip_id=current_trip_id, is_admin=False)
   
     db.session.add(new_user_trip)
+    db.session.commit()
+    return redirect("/followers")
+
+
+
+@app.route("/invite-list")
+def show_invite_list():
+    """ renders a page to show users we can invite to trip"""
+    print("in add-users-to-followers")
+    current_trip_id=session["current_trip_id"]
+    user_id = session["current_user_id"]
+    users_to_invite = []
+    # get list of all users except current user 
+    users_list = User.query.filter(User.user_id!=user_id).all()
+    # go through all users in user list
+    for user in users_list:
+        print("in for loop, user is:")
+        print(user.fname)
+
+        # for each user check if they are in user_trips with this trip id
+        is_in_trip = UserTrip.query.filter(UserTrip.trip_id==current_trip_id, UserTrip.user_id==user.user_id).first()
+        # all users who aren't following this trip or admins
+        if not is_in_trip:
+            print("can invite:")
+            users_to_invite.append(user)
+            print(user.user_id)
+    # render template of list of users
+    # each user will have an add/invite button
+    # which will be a form redirecting to make follower route
+    return render_template("invite-users.html", users_to_invite=users_to_invite)
+
+
+
+
+
+@app.route("/delete-trip", methods=['POST'])
+def delete_trip():
+    """deletes the trip if user is admin or following it"""
+    # make request to get information about trip and user from form
+    # make query to get row in user-trips table
+    
+    # delete row from UserTrips table
+    # delete row from Trips table
+    # redirect to followers route
+
+    current_trip_id=session["current_trip_id"]
+    user_id = session["current_user_id"]
+
+    user_trip = UserTrip.query.filter(UserTrip.user_id==user_id, UserTrip.trip_id==current_trip_id).first()
+
+    db.session.delete(user_trip)
+
+
     db.session.commit()
     return redirect("/followers")
 

@@ -9,6 +9,9 @@
 <ul>{% for trip in my_trips %}
             <li><a href="/trip/{{trip.trip_name}}" >{{trip.trip_name}}</a></li>
     {% endfor %}
+    {% if not my_trips %}
+        No trips to show
+    {% endif %}
 </ul>
 
 
@@ -16,6 +19,9 @@
 <ul>{% for trip in followed_trips %}
         <li><a href="/friend-trip-map-view/{{trip.trip_name}}">{{trip.trip_name}}</a></li>
     {% endfor %}
+    {% if not followed_trips %}
+        No trips to show
+    {% endif %}
 </ul>
 
 

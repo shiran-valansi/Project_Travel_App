@@ -15,6 +15,9 @@ I need to check if I am an admin of this trip -->
         {%endif%}
         
     {% endfor %}
+    {% if not user_trips %}
+        No trips to show
+    {% endif %}
 </ul>
 
 
@@ -29,6 +32,9 @@ I need to check if I am an admin of this trip -->
 
 
     {% endfor %}
+    {% if not followed_trips %}
+        No trips to show
+    {% endif %}
 </ul>
 
 <br>
