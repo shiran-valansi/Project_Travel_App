@@ -15,7 +15,7 @@ have option of joining trip/copying trip -->
             <li> {{user.fname}}&nbsp{{user.lname}}:</li>
             {%for trip in user.trips%}
                 <ul><li><a href="/friend-trip-map-view/{{ trip.trip_name }}" >{{ trip.trip_name }}</a></li></ul>  
-                }
+                
             {%endfor%}
         {% endif %}  
     {% endfor %}

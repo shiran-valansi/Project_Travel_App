@@ -18,7 +18,7 @@
              <li>
                 <a href="/user-friend/{{user.user_id}}" >{{user.fname}}&nbsp{{user.lname}}</a>
                 <form action="/make-follower" method="POST">
-                    <input type="hidden" name="user" value="{{user.user_id}}">
+                    <input type="hidden" name="user_id" value="{{user.user_id}}">
 
                     <input type="submit" value="Invite to Follow">
 

@@ -6,11 +6,13 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, request, jsonify, render_template, redirect, flash, session
+from flask import Flask, request, jsonify, render_template, redirect, flash, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, User, Pinpoint, Trip, UserTrip, Tag, TripTag, Friend
 # import model
+from model import connect_to_db, db, User, Pinpoint, Trip, UserTrip, Tag, TripTag, Friend
+
+from werkzeug.utils import secure_filename
 
 import datetime
 
@@ -23,6 +25,56 @@ app.secret_key = "ABC"
 
 # If you use an undefined variable in Jinja2 it raises an error
 app.jinja_env.undefined = StrictUndefined
+
+####################################################################################
+#******************* adding add photos option****************
+
+# UPLOAD_FOLDER = '/path/to/the/uploads'
+# ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+
+# # Function to check if an extension is valid and to upload the file and 
+# # redirects the user to the URL for the uploaded file:
+
+# def allowed_file(filename):
+#     return '.' in filename and \
+#            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# @app.route('/photos', methods=['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         # check if the post request has the file part
+#         if 'file' not in request.files:
+#             flash('No file part')
+#             return redirect(request.url)
+#         file = request.files['file']
+#         # if user does not select file, browser also
+#         # submit an empty part without filename
+#         if file.filename == '':
+#             flash('No selected file')
+#             return redirect(request.url)
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             return redirect(url_for('uploaded_file',
+#                                     filename=filename))
+#     return render_template("upload_photos")
+#     return '''
+#     <!doctype html>
+#     <title>Upload new File</title>
+#     <h1>Upload new File</h1>
+#     <form method=post enctype=multipart/form-data>
+#       <input type=file name=file>
+#       <input type=submit value=Upload>
+#     </form>
+# ...
+
+#                           FINISH OF ADD PHOTOS TRY 
+################################################################################
+
 
 
 
@@ -165,11 +217,11 @@ def make_admin():
     # redirect to followers route
     current_trip_id=session["current_trip_id"]
     user_id = request.form.get("follower_id")
-    print("making query to db")
+    # print("making query to db")
     user_trip = UserTrip.query.filter(UserTrip.user_id==user_id, UserTrip.trip_id==current_trip_id).first()
-    print(user_trip.is_admin)
+    # print(user_trip.is_admin)
     user_trip.is_admin = True 
-    print(user_trip.is_admin)
+    # print(user_trip.is_admin)
     db.session.add(user_trip)
     db.session.commit()
     return redirect("/followers")
@@ -185,13 +237,17 @@ def make_follower():
     # add and commit to database
     # redirect to followers route
     current_trip_id=session["current_trip_id"]
-    user_id = session["current_user_id"]
+    # user_id = session["current_user_id"]
+    # get user_id from form
+    user_id = request.form.get("user_id")
+
     # print("making query to db")
 
     new_user_trip = UserTrip(user_id=user_id, trip_id=current_trip_id, is_admin=False)
   
     db.session.add(new_user_trip)
     db.session.commit()
+
     return redirect("/followers")
 
 

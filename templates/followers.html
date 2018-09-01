@@ -94,7 +94,6 @@
         <p>
                 <a href="/invite-list">Invite</a>
               
-            
         </p>
     {% endif %}
 
@@ -107,7 +106,8 @@
                      
         <p>
                 <form action="/make-follower" method="POST">
-            
+
+                    <input type="hidden" name="user_id" value="{{session['current_user_id']}}">
                     <input type="submit" value="Follow this trip">
             
                 </form>
