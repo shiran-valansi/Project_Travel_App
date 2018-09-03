@@ -15,8 +15,20 @@
     {%endfor%}
     <h3>Add Photos</h3>
     <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
+        <input type=file name=file>
+        Where was the photo taken?
+
+<!-- put dropdown of pinpoints for this trip
+ -->
+        <select name="pp_id" id="pp_id">
+                <option value="None" id="pp_id">N/A</option>
+            {% for pinpoint in pinpoint_dict_list %}
+                <option value="{{pinpoint['pp_id']}}" >{{pinpoint['name']}}</option>
+            {% endfor %}
+         
+        </select>
+
+        <input type=submit value=Upload>
     </form>
 
 

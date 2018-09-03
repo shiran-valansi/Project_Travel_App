@@ -66,9 +66,11 @@
         var description = document.getElementById("description").value;
 
         var if_exists = true; // true= if editing the pinpoint, false= if addig a new pinpoint
-        var place = {"name": name, "start": start, "end":end, "rating": rating, "description":description, "if_exists":if_exists}; 
+        var file = document.getElementById("file").value;
+        console.log("file is:"+file);
+        var place = {"name": name, "start": start, "end":end, "rating": rating, "description":description, "if_exists":if_exists, "file":file}; 
       
-        var file_path = document.getElementById("pic").value;
+        // var file_path = document.getElementById("pic").value;
         // // $.post("/add-pinpoint", {"name": name}, resultFunc);
         $.post("/add-pinpoint", place, resultFunc);
         // $.post("/add-photos", file_path)

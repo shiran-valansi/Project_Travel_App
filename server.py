@@ -71,15 +71,18 @@ def upload_file():
             print("filename is:")
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            add_photo(filename)
+            pp_id = request.form.get("pp_id")
+            add_photo(filename, pp_id)
 
         
+    trip_name, pinpoint_dict_list = get_pinpoints()
     photos_list = get_photos()
+
     
-    return render_template("trip_photos.html", photos_list=photos_list)
+    return render_template("trip_photos.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
 
 
-def add_photo(filename):
+def add_photo(filename, pp_id):
     """ adds photo to database"""
 
     # need trip id
@@ -87,11 +90,11 @@ def add_photo(filename):
     # need file_path
     file_path = "/static/photos/"+filename
     # check if the photo is already in database
-    in_db = Photo.query.filter(trip_id=trip_id, file_path=file_path, file_name=filename).first()
+    in_db = Photo.query.filter_by(trip_id=trip_id, pp_id=pp_id, file_path=file_path, file_name=filename).first()
     if not in_db:
 
         # add row to photos table
-        new_photo = Photo(file_path = file_path, file_name=filename, trip_id=trip_id)
+        new_photo = Photo(file_path = file_path, file_name=filename, trip_id=trip_id, pp_id=pp_id)
         db.session.add(new_photo)
         db.session.commit()
         print("added photo to database")
@@ -717,16 +720,31 @@ def get_pinpoints():
     # make a list of pinpoints where every pinpoint is a dictionary
     # with keys: name, start, end, etc
     pinpoint_dict_list = []
+    
 
     for pinpoint in pinpoint_list:
-        pinpoint_dict = {"name": pinpoint.name,
+        photos_list = []
+        photo_list = Photo.query.filter(Photo.trip_id==current_trip_id, Photo.pp_id==pinpoint.pp_id).all()
+        for photo in photo_list:
+            # make list of dictionaries
+            photos_list.append({"file_path":photo.file_path,
+                                "file_name":photo.file_name}) 
+            print("photos_list:")
+            print(photos_list)
+            # photos_list is a list of dictionaries
+            # every item in the list is a dict of 2 items:
+            # file_path and file_name
+        pinpoint_dict = {"pp_id": pinpoint.pp_id,
+                        "name": pinpoint.name,
                         "start": pinpoint.start,
                         "end": pinpoint.end,
                         "lat": pinpoint.lat,
                         "lng": pinpoint.lng,
                         "rating": pinpoint.rating,
-                        "description": pinpoint.description}
+                        "description": pinpoint.description,
+                        "photos": photos_list}
         pinpoint_dict_list.append(pinpoint_dict)
+
 
     return (current_trip_name, pinpoint_dict_list)
 
