@@ -10,7 +10,7 @@ from flask import Flask, request, jsonify, render_template, redirect, flash, ses
 from flask_debugtoolbar import DebugToolbarExtension
 
 # import model
-from model import connect_to_db, db, User, Pinpoint, Trip, UserTrip, Tag, TripTag, Friend
+from model import connect_to_db, db, User, Pinpoint, Trip, UserTrip, Tag, TripTag, Friend, Photo
 
 from werkzeug.utils import secure_filename
 
@@ -29,48 +29,94 @@ app.jinja_env.undefined = StrictUndefined
 ####################################################################################
 #******************* adding add photos option****************
 
-# UPLOAD_FOLDER = '/path/to/the/uploads'
-# ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+UPLOAD_FOLDER = './static/photos'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 
-# # Function to check if an extension is valid and to upload the file and 
-# # redirects the user to the URL for the uploaded file:
-
-# def allowed_file(filename):
-#     return '.' in filename and \
-#            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# @app.route('/trip-photos')
+# def show_photo_for
 
 
-# @app.route('/photos', methods=['GET', 'POST'])
-# def upload_file():
-#     if request.method == 'POST':
-#         # check if the post request has the file part
-#         if 'file' not in request.files:
-#             flash('No file part')
-#             return redirect(request.url)
-#         file = request.files['file']
-#         # if user does not select file, browser also
-#         # submit an empty part without filename
-#         if file.filename == '':
-#             flash('No selected file')
-#             return redirect(request.url)
-#         if file and allowed_file(file.filename):
-#             filename = secure_filename(file.filename)
-#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#             return redirect(url_for('uploaded_file',
-#                                     filename=filename))
-#     return render_template("upload_photos")
-#     return '''
-#     <!doctype html>
-#     <title>Upload new File</title>
-#     <h1>Upload new File</h1>
-#     <form method=post enctype=multipart/form-data>
-#       <input type=file name=file>
-#       <input type=submit value=Upload>
-#     </form>
-# ...
+
+# Function to check if an extension is valid and to upload the file and 
+# redirects the user to the URL for the uploaded file:
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/trip-photos', methods=['GET', 'POST'])
+def upload_file():
+    print("in add-photos post route")
+    if request.method == 'POST':
+
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        print(file)
+        print("this is the file name:")
+        print(file.filename)
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            print("filename is:")
+            print(filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            add_photo(filename)
+
+        
+    photos_list = get_photos()
+    
+    return render_template("trip_photos.html", photos_list=photos_list)
+
+
+def add_photo(filename):
+    """ adds photo to database"""
+
+    # need trip id
+    trip_id = session["current_trip_id"]
+    # need file_path
+    file_path = "/static/photos/"+filename
+    # check if the photo is already in database
+    in_db = Photo.query.filter(trip_id=trip_id, file_path=file_path, file_name=filename).first()
+    if not in_db:
+
+        # add row to photos table
+        new_photo = Photo(file_path = file_path, file_name=filename, trip_id=trip_id)
+        db.session.add(new_photo)
+        db.session.commit()
+        print("added photo to database")
+    else:
+        flash("photo already loaded")
+    return 
+
+
+def get_photos():
+    """ show all photos of trip"""
+    # need trip id
+    trip_id = session["current_trip_id"]
+    # need to query for photos by using trip id
+    photos_list = Photo.query.filter(Photo.trip_id==trip_id).all()
+   
+  
+    return  photos_list
+
+
+@app.route("/show-photo/<file_name>")
+def show_photo(file_name):
+    """ show the photo large scaled"""
+    photo = Photo.query.filter(Photo.trip_id==session["current_trip_id"], Photo.file_name==file_name).first()
+    
+    return render_template("big_photo.html", photo=photo)
 
 #                           FINISH OF ADD PHOTOS TRY 
 ################################################################################
@@ -836,6 +882,7 @@ def add_latlng():
             find_pinpoint.rating = rating
             find_pinpoint.description = description
             
+
     db.session.commit()
 
     return "have pinpoint"

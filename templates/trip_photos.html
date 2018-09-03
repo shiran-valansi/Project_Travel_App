@@ -1,0 +1,22 @@
+ <!doctype html>
+    <title>Trip Photos</title>
+  
+
+    <h2>Photos from {{session["current_trip_name"]}}</h2>
+    <p><a href="/map-view">Map View</a></p>
+    <p><a href="/calendar-view" >Calendar View</a></p>
+    <p><a href="/users/{{session['current_user_id']}}" >My Profile</a></p> 
+    <p><a href="/logout">Log Out</a></p>
+    {%for photo in photos_list%}
+        <a href="/show-photo/{{photo.file_name}}">
+            <img src="{{photo.file_path}}" alt="{{photo.file_name}}" height="100" width="100">
+        </a> 
+        <br>
+    {%endfor%}
+    <h3>Add Photos</h3>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+
+

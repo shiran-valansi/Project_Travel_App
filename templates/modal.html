@@ -57,22 +57,23 @@
 
         ///////////////////how to do without for loop
         // for ( let i=0; i<markers.length; i++){
-            // console.log("in for loop");
-            var name = marker_title;
-            // var latlng = marker_position.getPosition().toString();
-            var start = document.getElementById("start").value;
-            var end = document.getElementById("end").value;
-            var rating = document.getElementById("rating").value;
-            var description = document.getElementById("description").value;
+        // console.log("in for loop");
+        var name = marker_title;
+        // var latlng = marker_position.getPosition().toString();
+        var start = document.getElementById("start").value;
+        var end = document.getElementById("end").value;
+        var rating = document.getElementById("rating").value;
+        var description = document.getElementById("description").value;
 
-            var if_exists = true; // true= if editing the pinpoint, false= if addig a new pinpoint
-            var place = {"name": name, "start": start, "end":end, "rating": rating, "description":description, "if_exists":if_exists}; 
-          
-            
-            // // $.post("/add-pinpoint", {"name": name}, resultFunc);
-            $.post("/add-pinpoint", place, resultFunc);
-            // console.log("marker.title: "+ name);
-           
+        var if_exists = true; // true= if editing the pinpoint, false= if addig a new pinpoint
+        var place = {"name": name, "start": start, "end":end, "rating": rating, "description":description, "if_exists":if_exists}; 
+      
+        var file_path = document.getElementById("pic").value;
+        // // $.post("/add-pinpoint", {"name": name}, resultFunc);
+        $.post("/add-pinpoint", place, resultFunc);
+        // $.post("/add-photos", file_path)
+        // console.log("marker.title: "+ name);
+       
      }
 
      function resultFunc(result){

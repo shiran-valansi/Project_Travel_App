@@ -150,7 +150,7 @@ class Photo(db.Model):
     photo_id = db.Column(db.Integer, autoincrement=True, 
                         primary_key=True)
     file_path = db.Column(db.String(200), nullable=False)
-    file_name = db.Column(db.String(64), nullable=False)
+    file_name = db.Column(db.String(64), nullable=True)
     trip_id = db.Column(db.Integer, 
                         db.ForeignKey('trips.trip_id'),
                         nullable=False)
