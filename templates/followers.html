@@ -8,6 +8,7 @@
     <div> 
         <a href="/map-view" >Map View</a>&nbsp&nbsp&nbsp&nbsp
         <a href="/calendar-view" >Calendar View</a>&nbsp&nbsp&nbsp&nbsp
+        <a href="/trip-photos" >Photos</a> &nbsp&nbsp&nbsp&nbsp&nbsp
         <a href="/users/{{session['current_user_id']}}" >My Profile</a>&nbsp&nbsp&nbsp&nbsp
         <a href="/logout">Log Out</a>
     </div>
@@ -19,7 +20,7 @@
 
         {% if admin_list %}
             <ul>
-                    {% for admin in admin_list%}
+                    {% for admin in admin_list %}
                     
                         {%if admin.user_id!=session["current_user_id"]%}
                            <li> <a href="/user-friend/{{admin.user_id}}" >{{admin.fname}}&nbsp{{admin.lname}}</a></li>

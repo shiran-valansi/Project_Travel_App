@@ -12,9 +12,9 @@ have option of joining trip/copying trip -->
 <ul>{% for user in all_users_list %}
         {% if user.user_id != session['current_user_id']%}
 
-            <li> {{user.fname}}&nbsp{{user.lname}}:</li>
+            <li> <a href="/user-friend/{{user.user_id}}" >{{user.fname}}&nbsp{{user.lname}}:</a></li>
             {%for trip in user.trips%}
-                <ul><li><a href="/friend-trip-map-view/{{ trip.trip_name }}" >{{ trip.trip_name }}</a></li></ul>  
+            <ul><li><a href="/friend-trip-map-view/{{ trip.trip_name }}" >{{ trip.trip_name }}</a></li></ul>  
                 
             {%endfor%}
         {% endif %}  
