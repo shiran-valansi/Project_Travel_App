@@ -6,6 +6,7 @@
 
     <h3>Hi {{ session['fname'] }}!</h3>
     <h2>Photos from {{session["current_trip_name"]}}</h2>
+    <br>
 
 
     <!-- <div>
@@ -17,6 +18,27 @@
         <a href="/logout">Log Out</a>
 
     </div> -->
+<div>
+    <h5>Add Photos</h5>
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        Where was the photo taken?
+
+<!-- put dropdown of pinpoints for this trip
+ -->
+            <select name="pp_id" id="pp_id">
+                    <option value="None" id="pp_id">N/A</option>
+                {% for pinpoint in pinpoint_dict_list %}
+                    <option value="{{pinpoint['pp_id']}}" >{{pinpoint['name']}}</option>
+                {% endfor %}
+             
+            </select>
+            
+
+        <input type=submit value=Upload>
+    </form>
+    <br>
+</div>
     
     {%for photo in photos_list%}
         <a href="/show-photo/{{photo.file_name}}">
@@ -24,22 +46,7 @@
         </a> 
         <br>
     {%endfor%}
-    <h3>Add Photos</h3>
-    <form method=post enctype=multipart/form-data>
-        <input type=file name=file>
-        Where was the photo taken?
 
-<!-- put dropdown of pinpoints for this trip
- -->
-        <select name="pp_id" id="pp_id">
-                <option value="None" id="pp_id">N/A</option>
-            {% for pinpoint in pinpoint_dict_list %}
-                <option value="{{pinpoint['pp_id']}}" >{{pinpoint['name']}}</option>
-            {% endfor %}
-         
-        </select>
-
-        <input type=submit value=Upload>
 
 
 {% endblock %}
