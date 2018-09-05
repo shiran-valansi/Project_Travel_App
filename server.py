@@ -78,8 +78,10 @@ def upload_file():
     trip_name, pinpoint_dict_list = get_pinpoints()
     photos_list = get_photos()
 
-    
-    return render_template("trip_photos.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
+    user_trip=UserTrip.query.filter(UserTrip.user_id==session["current_user_id"], UserTrip.trip_id==session["current_trip_id"]).first()
+    if user_trip.is_admin:
+        return render_template("trip_photos.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
+    return render_template("trip_photos_no_edit.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
 
 
 def add_photo(filename, pp_id):
@@ -670,9 +672,13 @@ def get_friend_trip_details(trip_name):
     ####################################################
     # going to work if there's only one unique trip name
     # need to filter for trip name AND user id, which is already in the session
+    print("trip_name:"+trip_name)
     current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
+    print("current_trip:")
+    print(current_trip)
     #updateing current trip in session - by id and name
     session["current_trip_name"] = current_trip.trip_name
+    print("session[current_trip_name]: "+session["current_trip_name"])
     session["current_trip_id"] = current_trip.trip_id
     return render_template("map-view-no-edit.html", trip = current_trip, key=os.environ['GOOGLE_API_KEY'])
 

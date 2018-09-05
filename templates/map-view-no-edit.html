@@ -3,8 +3,9 @@
 {% block content %}
     <h2>{{session["current_trip_name"]}}</h2>
 
-    
-    <a href="/calendar-view-no-edit">Calendar View</a>&nbsp&nbsp&nbsp&nbsp
+    {% include 'style-nav-bar-no-edit.html' %}
+
+    <!-- <a href="/calendar-view-no-edit">Calendar View</a>&nbsp&nbsp&nbsp&nbsp
     <a href="/trip-photos" >Photos</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
     <a href="/followers" >Followers</a>&nbsp&nbsp&nbsp&nbsp
@@ -12,7 +13,7 @@
     <a href="/users/{{session['current_user_id']}}" >My Profile</a>&nbsp&nbsp&nbsp&nbsp
 
     <a href="/logout">Log Out</a>
-
+ -->
     {% include 'modal.html' %}
 
 <!--     {% include 'base-menu.html' %}

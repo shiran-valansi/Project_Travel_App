@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+    <title>Trip Photos</title>
+    {% include 'style-nav-bar.html' %}
+    {% block content %}
+
+    <h3>Hi {{ session['fname'] }}!</h3>
+    <h2>Photos from {{session["current_trip_name"]}}</h2>
+    <br>
+
+    
+    {%for photo in photos_list%}
+        <a href="/show-photo/{{photo.file_name}}">
+            <img src="{{photo.file_path}}" alt="{{photo.file_name}}" height="100" width="100">
+        </a> 
+        <br>
+    {%endfor%}
+
+
+
+{% endblock %}
+
+
