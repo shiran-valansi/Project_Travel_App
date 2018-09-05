@@ -1,11 +1,14 @@
- <!doctype html>
+{% extends 'base.html' %}
+
     <title>Trip Photos</title>
-  
+    {% include 'style-nav-bar.html' %}
+    {% block content %}
+
     <h3>Hi {{ session['fname'] }}!</h3>
     <h2>Photos from {{session["current_trip_name"]}}</h2>
 
 
-    <div>
+    <!-- <div>
         <a href="/map-view">Map View</a>&nbsp&nbsp&nbsp&nbsp&nbsp
         <a href="/calendar-view" >Calendar View</a>&nbsp&nbsp&nbsp&nbsp&nbsp
         <a href="/search" >Add places to trip</a>&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -13,7 +16,7 @@
         <a href="/users/{{session['current_user_id']}}" >My Profile</a>&nbsp&nbsp&nbsp&nbsp&nbsp
         <a href="/logout">Log Out</a>
 
-    </div>
+    </div> -->
     
     {%for photo in photos_list%}
         <a href="/show-photo/{{photo.file_name}}">
@@ -37,6 +40,8 @@
         </select>
 
         <input type=submit value=Upload>
-    </form>
+
+
+{% endblock %}
 
 

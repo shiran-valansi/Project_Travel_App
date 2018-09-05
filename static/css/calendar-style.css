@@ -1,4 +1,4 @@
-@import 'https://fonts.googleapis.com/css?family=Lato:300,300i,900,900i';
+/*@import '';*/
 .txt__normal {
   font-family: 'Lato', sans-serif;
   font-weight: 400;
@@ -42,7 +42,7 @@ html {
   height: 100%;
   background: #003567;
   color: #ffffff;
-  font-size: 13px;
+/*  font-size: 13px;*/  
   font-family: 'Lato', sans-serif;
   font-weight: 400;
 }
