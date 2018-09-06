@@ -366,9 +366,13 @@ def get_trip_details(trip_name):
     # need to filter for trip name AND user id, which is already in the session
     # current_trip = Trip.query.filter(Trip.trip_name==trip_name, User.user_id==user_id).first()
     current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
+    print("got query, current trip:")
+    print(current_trip)
+    print(current_trip.trip_name)
 
     #updateing current trip in session - by id and name
     session["current_trip_name"] = current_trip.trip_name
+    print("session[current_trip_name]:"+session["current_trip_name"])
     session["current_trip_id"] = current_trip.trip_id
     #changing this to go srtaight to map viiew
     # return render_template("trip-details.html", trip=current_trip)
