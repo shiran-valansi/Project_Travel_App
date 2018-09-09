@@ -1,35 +1,58 @@
 <h2 id="pinpoint-title">Name of Destination</h2>
 <!-- <form action="/register" method= "POST">-->
-
+<div class="container">
 <form  method=post enctype=multipart/form-data>
      
 <!--     To set a default value for an input element, you can set a value attribute, like:
 <input type="text" name="firstname" value="Jessica">
  -->
-    <p>When?&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="datetime-local" name="start" id ='start'></p>
-    <p>Until?&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="datetime-local" name="end" id='end'></p>
-<!--     <p>How long?&nbsp&nbsp&nbsp<input type="text" name="duration"></p>
-    <p>Lat:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" name="lat"></p>
-    <p>Lng:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" name="lng"></p> -->
+    <div class="row">
+      <div class="col">
+        <label for="StartDateTime">From</label>
+        <input type="datetime-local" class="form-control" name="start" id ='start'></p>
+      </div>
+      <div class="col">
+        <label for="EndDateTime">To</label>
+        <input type="datetime-local" class="form-control" name="end" id='end'></p>
+      </div>
+    </div>
 
-    <div>
-        <p>Rating:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<select name="rating" id="rating"></p>
+    <div class="form-group">   
+      <label for="rating">Rating</label>
+      <select name="rating" id="rating" class="form-control">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
         <option value="5">5</option>
-        </select>
+      </select>
     </div>
 
-    <p>Description: </p>
-    <div> 
-        <textarea name="description" id="description"></textarea>
+
+<!-- <p>Rating:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <select name="rating" id="rating">
+        </p>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        </select> -->
+
+
+
+
+
+
+
+
+
+
+    <div class="form-group">
+      <label for="ExampleDescription">Description</label>
+      <textarea name="description" class="form-control" id="description"></textarea>
     </div>
     <p> Add photos</p>
     <input type="file" name="file" id="file"><br>
-<!--     <input type=submit value=Upload>
- -->
 
-<!--     <p><input type="submit" value="Save"></p> -->
 </form>
+</div>
