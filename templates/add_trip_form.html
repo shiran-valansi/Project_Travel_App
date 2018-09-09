@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light style="background-color: #e3f2fd;"">
+  <a class="navbar-brand" href="#">&nbspTravelary</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav ml-auto">
+<!--       <li class="nav-item active"> -->
+      
+      <!-- <div class="right "> -->
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Log out</a>
+        </li>
+    </ul>
+  </div>
+</nav>
+
+
+<ul>
+    <h5>Hi {{ session['fname'] }}!</h5>
+</ul>
+<div class="container">
+  <form action="/add-trip" method= "POST">
+    
+    <div class="form-group">
+      <label for="exampleInputEmail1">What's the name of your trip?</label>
+      <input type="text" class="form-control" id="trip_name" aria-describedby="trip_name" placeholder="Enter trip name">
+    </div>
+
+  <div class="row">
+      <div class="col">
+        <label for="StartDateTime">From</label>
+        <input type="datetime-local" class="form-control" id="start_trip" placeholder="Start Date and Time">
+      </div>
+      <div class="col">
+        <label for="EndDateTime">To</label>
+        <input type="datetime-local" class="form-control" id="end_trip" placeholder="End Date and Time">
+      </div>
+    </div>
+
+    <br>
+    <div class="form-radio">
+      <p>Would you like your trip to be public?</p>
+      <input type="radio" name="is_public" value='True' checked>Yes
+      <input type="radio" name="is_public" value='True' >No
+    </div>
+    
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a type="button" href="/users/{{session['current_user_id']}}" class="btn btn-secondary">Cancel</a>  
+  </form>
+</div>
+
+{% endblock %}

@@ -764,7 +764,7 @@ def get_pinpoints():
 def add_trip_form():
     """form to add trip details"""
 
-    return render_template("add-trip.html")
+    return render_template("add_trip_form.html")
 
 
 
@@ -941,4 +941,4 @@ if __name__ == "__main__":
     # Use the DebugToolbar
     # DebugToolbarExtension(app)
 
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host="0.0.0.0", port="5001")
