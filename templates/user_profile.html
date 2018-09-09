@@ -1,44 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<!-- <ul>
-    <h5>Hi {{ session['fname'] }}!</h5>
-</ul>
- -->
-<!-- <h2>My Trips</h2>
-<ul>{% for trip in my_trips %}
-            <li><a href="/trip/{{trip.trip_name}}" >{{trip.trip_name}}</a></li>
-    {% endfor %}
-    {% if not my_trips %}
-        No trips to show
-    {% endif %}
-</ul> -->
 
-
-<!-- <h2>Following</h2>
-<ul>{% for trip in followed_trips %}
-        <li><a href="/friend-trip-map-view/{{trip.trip_name}}">{{trip.trip_name}}</a></li>
-    {% endfor %}
-    {% if not followed_trips %}
-        No trips to show
-    {% endif %}
-</ul> -->
-
-
-
-
-<!-- 
-<br>
-<h2><a href="/add-trip">Add Trip</a></h2>
-<br> -->
-
-<!-- <h2><a href="/following">Following</a></h2> -->
-<!-- here I'll have a list of users and a list of trips -->
-<!-- <h2><a href="/explore">Explore</a></h2>
-<br>
- -->
-<!-- <h5><a href="/logout">Log Out</a></h5>
- -->
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -102,11 +65,11 @@
 }
 </style>
 
+{% include 'nav-bar-min.html' %}
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light style="background-color: #e3f2fd;"">
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light style="background-color: #e3f2fd;"">
   <a class="navbar-brand" href="#">&nbspTravelary</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -114,13 +77,11 @@
 
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav ml-auto">
-<!--       <li class="nav-item active"> -->
-      
-      <!-- <div class="right "> -->
+
         <li class="nav-item">
           <a class="nav-link" href="/logout">Log out</a>
         </li>
-
+ -->
       <!-- </div> -->
       <!-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -142,10 +103,10 @@
           <a class="dropdown-item" href="#">Something else here</a>
         </div>
       </li> -->
-    </ul>
+  <!--   </ul>
   </div>
 </nav>
-
+ -->
 
 
 <h1>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHi {{ session['fname'] }}</h1>
@@ -202,19 +163,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 {% endblock %}
 
