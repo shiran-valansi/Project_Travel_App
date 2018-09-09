@@ -3,10 +3,12 @@
 
 
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
  -->
- <style>
+
+ <link rel="stylesheet" href="/static/css/profile-page.css">
+ <!-- <style>
   /********SCROLLBAR*********/ 
   /* width */
   ::-webkit-scrollbar {
@@ -63,50 +65,9 @@
 .align-buttons{
   align-items: center
 }
-</style>
+</style> -->
+{%include 'nav-bar-min.html'%}
 
-{% include 'nav-bar-min.html' %}
-
-
-
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light style="background-color: #e3f2fd;"">
-  <a class="navbar-brand" href="#">&nbspTravelary</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav ml-auto">
-
-        <li class="nav-item">
-          <a class="nav-link" href="/logout">Log out</a>
-        </li>
- -->
-      <!-- </div> -->
-      <!-- <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          My Trips
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Following
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li> -->
-  <!--   </ul>
-  </div>
-</nav>
- -->
 
 
 <h1>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHi {{ session['fname'] }}</h1>
@@ -117,7 +78,7 @@
       <div class="card scroller scrollbar-near-moon">
         <div class="card-body">
           <h5 class="card-title">My Trips</h5>
-          <p class="card-text"> MY TRIPS GO HERE </p>
+          <!-- <p class="card-text"> MY TRIPS GO HERE </p> -->
           <p> 
             <ul>{% for trip in my_trips %}
                     <li><a href="/trip/{{trip.trip_name}}" >{{trip.trip_name}}</a></li>
@@ -141,10 +102,9 @@
     <div class="col-sm-6">
       <div class="card scroller scrollbar-near-moon">
         <div class="card-body">
-          <h5 class="card-title"></h5>
+          <h5 class="card-title">Following</h5>
           <p class="card-text">     
           <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-          <h2>Following</h2>
                 <ul>{% for trip in followed_trips %}
                         <li><a href="/friend-trip-map-view/{{trip.trip_name}}">{{trip.trip_name}}</a></li>
                     {% endfor %}

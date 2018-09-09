@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% include 'nav-bar-min.html' %}
 
 <ul>
     <h5>Hi {{ session['fname'] }}!</h5>
@@ -27,7 +28,5 @@ have option of joining trip/copying trip -->
 
 <br>
 
-
-<h5><a href="/logout">Log Out</a></h5>
 
 {% endblock %}
