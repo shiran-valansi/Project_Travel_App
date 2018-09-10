@@ -80,7 +80,7 @@ def upload_file():
 
     user_trip=UserTrip.query.filter(UserTrip.user_id==session["current_user_id"], UserTrip.trip_id==session["current_trip_id"]).first()
     if user_trip.is_admin:
-        return render_template("trip_photos.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
+        return render_template("album.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
     return render_template("trip_photos_no_edit.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
 
 
@@ -127,6 +127,9 @@ def show_photo(file_name):
 ################################################################################
 
 
+@app.route('/album')
+def show_pics():
+    return render_template("album.html")
 
 
 @app.route('/')
