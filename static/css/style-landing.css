@@ -1,0 +1,141 @@
+@import url(https://fonts.googleapis.com/css?family=Lobster);
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+.bg-wrapper {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.bg-wrapper .bg {
+  height: 109%;
+  width: 106%;
+  background: url(../../static/photos/chosen2.png) no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  z-index: -99;
+}
+
+.top-content {
+  display: flex;
+  width: 100%;
+}
+.top-content span {
+  flex-grow: 1;
+  margin: 50px 70px;
+  display: flex;
+}
+.top-content span:last-child {
+  align-items: center;
+  justify-content: flex-end;
+}
+@media (max-width: 575.98px) {
+  .top-content span {
+    margin: 50px 30px;
+  }
+}
+
+.menu {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 8px;
+  transition: all .15s linear;
+  border: 1px solid white;
+  box-shadow: 0px 0px 30px 12px rgba(0, 0, 0, 0.1);
+}
+.menu:hover {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: none;
+}
+
+.bottom-content {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 40px 70px;
+  margin-top: auto;
+  width: 100%;
+}
+@media (max-width: 575.98px) {
+  .bottom-content {
+    padding: 50px 30px;
+  }
+}
+.bottom-content p {
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  line-height: 27px;
+  font-size: 17px;
+  margin: 7px 0px 23px 0px;
+  text-shadow: 1px 2px 10px rgba(0, 0, 0, 1);
+}
+@media (max-width: 575.98px) {
+  .bottom-content p {
+    font-size: 14px;
+  }
+}
+
+.content-left {
+  flex-grow: 1;
+  text-align: center;
+  max-width: 650px;
+}
+.content-left .title {
+  font-family: "Lobster", cursive;
+  color: #fff;
+  font-size: 60px;
+  text-shadow: 1px 2px 10px rgba(0, 0, 0, 0.3);
+}
+@media (max-width: 575.98px) {
+  .content-left .title {
+    font-size: 40px;
+  }
+}
+
+.content-right {
+  flex-grow: 1;
+  text-align: right;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+@media (max-width: 991.98px) {
+  .content-right {
+    text-align: center;
+    justify-content: center;
+  }
+}
+.content-right p {
+  margin: 20px 0;
+  line-height: 30px;
+}
+
+button,
+button:visited,
+button:focus {
+  cursor: pointer;
+  border: 1px solid white;
+  background: rgba(0, 0, 0, 0.3);
+  width: 160px;
+  padding: 15px 0px;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  box-shadow: 0px 0px 30px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s linear;
+  outline: none;
+}
+button:hover,
+button:visited:hover,
+button:focus:hover {
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.5);
+}
