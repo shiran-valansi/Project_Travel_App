@@ -52,6 +52,7 @@ def allowed_file(filename):
 def upload_file():
     print("in add-photos post route")
     if request.method == 'POST':
+        print("in post logic")
 
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -136,7 +137,7 @@ def show_pics():
 def index():
     """Homepage."""
 
-    return render_template("homepage.html")
+    return render_template("landing-page.html")
 
 
 
