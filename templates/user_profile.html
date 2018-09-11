@@ -67,12 +67,30 @@
 }
 </style> -->
 {%include 'nav-bar-min.html'%}
+<style>
+.bg {
+    /* The image used */
+    background-image: url("../../static/photos/chosen2-Copy2.png");
+    height: 45%;
+    /* Full height */
+    /*height: 100%;*/
 
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+  .btn-new{
+    background-color: #86C7CC !important;
+    border-color: #86C7CC !important;
+    /*text-decoration-color: #000000;*/
+  }
+</style>
 
-
+<div class="bg">
 <h1>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHi {{ session['fname'] }}</h1>
 
-<div class="container">
+<div class="container"><br><br>
   <div class="row vertical-center">
     <div class="col-sm-6 ">
       <div class="card scroller scrollbar-near-moon">
@@ -95,7 +113,7 @@
       <br>
       <!-- <div class="col-4 "> -->
       <div class="col-md-8 ml-md-auto ">
-        <a href="/add-trip" class="btn btn-primary btn-lg " role="button" >Add Trip</a>
+        <a href="/add-trip" class="btn btn-primary btn-lg btn-new" role="button" >Add Trip</a>
       </div>
    
     </div>
@@ -118,10 +136,11 @@
       </div>
       <br>
       <div class="col-md-8 ml-md-auto ">
-        <a href="/explore" class="btn btn-primary btn-lg" role="button" >Explore</a>
+        <a href="/explore" class="btn btn-primary btn-lg btn-new" role="button" >Explore</a>
       </div>
     </div>
   </div>
+</div>
 </div>
 
 {% endblock %}
