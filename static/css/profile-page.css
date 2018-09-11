@@ -1,3 +1,26 @@
+  
+/*BACKGROUND IMAGE*/
+.bg {
+    /* The image used */
+    background-image: url("../photos/chosen2-Copy2.png");
+    height: 45%;
+    /* Full height */
+    /*height: 100%;*/
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+  .btn-new{
+    background-color: #86C7CC !important;
+    border-color: #86C7CC !important;
+    /*text-decoration-color: #000000;*/
+  }
+
+  
+
+
 
   /********SCROLLBAR*********/ 
   /* width */
