@@ -927,7 +927,7 @@ def explore_trips():
     all_users_list = User.query.filter().group_by(User.user_id).all()
     print("got users list")
     print (all_users_list[0])
-    return render_template("explore.html", all_users_list=all_users_list)
+    return render_template("explore-try.html", all_users_list=all_users_list)
 
 
 

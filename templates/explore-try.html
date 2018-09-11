@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1">
+ -->
+
+ <link rel="stylesheet" href="/static/css/profile-page.css">
+
+{%include 'nav-bar-min.html'%}
+
+<ul>
+    <h5>Hi {{ session['fname'] }}!</h5>
+</ul>
+
+
+<div class="container">
+  <div class="row vertical-center">
+    {% for user in all_users_list %}
+          {% if user.user_id != session['current_user_id']%}
+            <div class="col-sm-4 ">
+              <div class="card scroller scrollbar-near-moon">
+                <div class="card-body">
+                  <h5 class="card-title"><a href="/user-friend/{{user.user_id}}" >{{user.fname}}&nbsp{{user.lname}}:</a></h5>
+              
+                    {%for trip in user.trips%}
+                      <ul><li><a href="/friend-trip-map-view/{{ trip.trip_name }}" >{{ trip.trip_name }}</a></li></ul>  
+                  
+                    {%endfor%}
+                </div>
+              </div>
+            </div>
+          {% endif %}  
+        {% endfor %}
+    
+    
+      
+  </div>
+</div>
+
+
+
+<br>
+
+<h2><p><a href="/users/{{session['current_user_id']}}" >My Profile</a></p></h2> 
+{% endblock %}
+
+
