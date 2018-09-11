@@ -25,7 +25,7 @@
 /* ===========================================================*/
 body {
   position: realative;
-  height: 100%;
+  /*height: 100%;*/
 }
 body.overlay:before {
   position: absolute;
@@ -39,9 +39,9 @@ body.overlay:before {
   z-index: 100;
 }
 html {
-  height: 100%;
+  /*height: 100%;*/
   background: #003567;
-  color: #ffffff;
+  color: #FFFFFF;
 /*  font-size: 13px;*/  
   font-family: 'Lato', sans-serif;
   font-weight: 400;
@@ -109,12 +109,12 @@ header > .wrapper {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  color: #ffffff;
+  color: #FFFFFF;
   letter-spacing: 2px;
   font-size: 13px;
 }
 header > .wrapper a {
-  color: #ffffff;
+  color: #FFFFFF;
   text-decoration: none;
   margin-left: 10px;
 }
@@ -188,7 +188,7 @@ header > .wrapper a {
   height: 30px;
   padding: 9px 12px;
 /*  background-color: #FFFFFF;
-*/  background-color: #004b8f;
+*/  background-color: #86C7CC;
   cursor: pointer;
   z-index: 10;
   box-sizing: border-box;
@@ -216,26 +216,28 @@ header > .wrapper a {
 }
 .c-month .prev:hover {
   padding: 9px 10px;
-  background-color: #0055a4;
+  background-color: blanchedalmond;
 }
 .c-month .next {
   right: 0;
 }
 .c-month .next:hover {
   padding: 9px 14px;
-  background-color: #0055a4;
+  background-color: blanchedalmond;
 }
 .c-paginator__year {
   height: 80px;
   line-height: 80px;
   padding: 0 20px;
 }
+
+/*TODAY AND ADD DESTINATION BUTTONS */
 .o-btn {
   display: inline-block;
   padding: 0 10px;
   line-height: 30px;
   height: 30px;
-  background-color: #004b8f;
+  background-color: #86C7CC;
   text-transform: uppercase;
   letter-spacing: 2px;
   border-radius: 15px;
@@ -254,8 +256,9 @@ header > .wrapper a {
 .o-btn span {
   margin-left: 10px;
 }
+/*TODAY HOVER*/
 .o-btn:hover {
-  background-color: #0055a4;
+  background-color: blanchedalmond;
 }
 .c-calendar {
   padding-top: 80px;
@@ -263,14 +266,17 @@ header > .wrapper a {
   justify-content: space-between;
   flex-direction: row;
 }
+/*MONTH AND SIDE BAR BACKGROUND*/
 .c-calendar__style {
-  background-color: #00407b;
+  background-color: #FFFFFF;
   margin: 20px;
   padding: 10px;
   box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.18);
   -webkit-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.18);
   border-radius: 6px;
   -webkit-border-radius: 6px;
+  
+ /* opacity: 0.5*/
 }
 .c-cal__container {
   position: relative;
@@ -358,7 +364,7 @@ header > .wrapper a {
   height: 40px;
   line-height: 40px;
  /* THE CIRCLES around dates*/
-  background: #004585;
+  background: #86C7CC;
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   border-radius: 50%;
@@ -371,23 +377,26 @@ header > .wrapper a {
   display: block;
   padding-top: 100%;
 }
+/*CIRCLE OF LEFT COLUMN OF NUMBERS*/
 .c-cal__cel:nth-child(1) p {
-  background: rgba(215, 16, 15, 0.2);
+  /*background: rgba(215, 16, 15, 0.2);*/
+  background: #86C7CC;
 }
 .c-cal__cel:nth-child(7) p {
-  background: #003b71;
+  /*background: #003b71;*/
 }
+/*HOVER OVER EACH DAY*/
 .c-cal__cel:hover {
-  background-color: #004b8f !important;
+  background-color: paleturquoise !important;
 }
 .c-cal__cel:hover p {
-  background: #003b71 !important;
+  background: #75EEC7 !important;
 }
 .c-cal__cel.isSelected {
-  background-color: #004b8f;
+  background-color: blanchedalmond;
 }
 .c-cal__cel.isSelected p {
-  background: #003b71;
+  background: paleturquoise;
 }
 .c-cal__cel.isToday {
   background-color: rgba(245, 113, 112, 0.2);
@@ -404,10 +413,11 @@ header > .wrapper a {
   display: block;
   width: 10px;
   height: 10px;
-  background-color: #F5F5F5;
+  background-color: #FFFFFF;
   z-index: 10;
   padding: 0;
-  top: 50%;
+  /*top: 50%;*/
+  top: 43%;
   left: 50%;
   border-radius: 50%;
   -webkit-border-radius: 50%;
@@ -447,7 +457,7 @@ header > .wrapper a {
   width: 16px;
   height: 16px;
   left: 0;
-  background-color: #F5F5F5;
+  background-color: #FFFFFF;
   border-radius: 50%;
   -webkit-border-radius: 50%;
 }
