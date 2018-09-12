@@ -1,40 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
-
-    <h3>Hi {{ session['fname'] }}!</h3>
-    <h2>{{session["current_trip_name"]}}</h2>
-    <div> 
+{% include 'style-nav-bar.html' %}
+<link rel="stylesheet" href="/static/css/profile-page.css">
+<div class="bg">
+    <!-- <h1 class="bold-type">Hi {{ session['fname'] }}!</h1> -->
+    <h2 class="bold-type">This is {{session["current_trip_name"]}}</h2><br><br>
+<!--     <div> 
         <a href="/map-view" >Map View</a>&nbsp&nbsp&nbsp&nbsp
         <a href="/calendar-view" >Calendar View</a>&nbsp&nbsp&nbsp&nbsp
         <a href="/users/{{session['current_user_id']}}" >My Profile</a>&nbsp&nbsp&nbsp&nbsp
         <a href="/logout">Log Out</a>
-    </div>
-    <br><br>
-    
-    <div>
-        <ui>
+    </div> -->
+        <br><br><br><br><br><br><br><br><br>
+      &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<div class="row " style="horizontal-align">  
+
+        
         {% for user in users_to_invite %}
-            
-             <li>
-                <a href="/user-friend/{{user.user_id}}" >{{user.fname}}&nbsp{{user.lname}}</a>
-                <form action="/make-follower" method="POST">
-                    <input type="hidden" name="user_id" value="{{user.user_id}}">
 
-                    <input type="submit" value="Invite to Follow">
+        <div class="col-sm-3 ">
+            <div class="card" style="margin: 15px">
+                <div class="card-body">
+                    <a href="/user-friend/{{user.user_id}}" >{{user.fname}}&nbsp{{user.lname}}</a>
+                    <form action="/make-follower" method="POST">
+                        <input type="hidden" name="user_id" value="{{user.user_id}}">
 
-                </form>
+                        <input type="submit" value="Invite to Follow">
 
-             </li>
-         </ui>
-    </div>
-
-
-    {% endfor %}
-
-
-
-
-
+                    </form>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+      </div>
+  </div>
 
 
 

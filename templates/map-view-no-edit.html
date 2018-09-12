@@ -1,9 +1,10 @@
 
 {% extends 'base.html' %}
 {% block content %}
-    <h2>{{session["current_trip_name"]}}</h2>
-
     {% include 'style-nav-bar-no-edit.html' %}
+
+    <h2>This is {{session["current_trip_name"]}}</h2>
+
 
     <!-- <a href="/calendar-view-no-edit">Calendar View</a>&nbsp&nbsp&nbsp&nbsp
     <a href="/trip-photos" >Photos</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -16,8 +17,7 @@
  -->
     {% include 'modal.html' %}
 
-<!--     {% include 'base-menu.html' %}
- -->
+
     <div id="map"></div>
     <!-- Replace the value of the key parameter with your own API key. -->
     

@@ -5,8 +5,34 @@
 {% block content %}
 <!--     <script  src="static/js/helper-functions.js"></script>
  -->
+ <style>
+ .bg {
+    /* The image used */
+    background-image: url("../../static/photos/chosen2-Copy2.png");
+    height: 45%;
+    /* Full height */
+    /*height: 100%;*/
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+  .btn-new{
+    background-color: #86C7CC !important;
+    border-color: #86C7CC !important;
+    /*text-decoration-color: #000000;*/
+  }
+
+</style>
+
+<!--  <div class="bg"><h3>Hi {{ session['fname'] }}!</h3>
+    <h2>{{session["current_trip_name"]}}</h2></div> -->
+
+ 
+
     <h3>Hi {{ session['fname'] }}!</h3>
-    <h2>{{session["current_trip_name"]}}</h2>
+    <h2>This is {{session["current_trip_name"]}}</h2>
 
    <!--  <div>
         <a href="/calendar-view" >Calendar View</a>&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -20,11 +46,10 @@
 
     {% include 'modal.html' %}
 
-<!--     {% include 'base-menu.html' %}
- -->
+
     <div id="map"></div>
     <!-- Replace the value of the key parameter with your own API key. -->
-    
+
     <script>
 
         var markers = [];
@@ -132,8 +157,7 @@
 
 
 
-                    var contentString = '<h1>' + marker.title + '</h1>'+'<h5>' + marker.description + '</h5>' +'<h5>'+ 'rating:' +marker.rating +'</h5>' +'<p>'+ marker.start +'</p>' +'<p>'+ marker.end +'</p>'+'<p>' +helper_string +'</p>'+ '<button id="deleteMarker" class="deleteMarker"> Delete </button>' + 
-                        '<button id="addMarker"  data-title="' + marker.title + '"class="btn btn-primary"  data-position=" '+ marker.position+ '"  data-toggle="modal" data-target="#exampleModalLong" >Edit</button>';
+                    var contentString = '<h1>' + marker.title + '</h1>'+'<h5>' + marker.description + '</h5>' +'<h5>'+ 'rating:' +marker.rating +'</h5>' +'<p>'+ marker.start +'</p>' +'<p>'+ marker.end +'</p>'+'<p>' +helper_string +'</p>'+'<button id="addMarker"  data-title="' + marker.title + '"class="btn btn-primary"  data-position=" '+ marker.position+ '"  data-toggle="modal" data-target="#exampleModalLong" >Edit</button>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' +'<button id="deleteMarker" class="deleteMarker"> Delete </button>';
 
                     // console.log("contentString: "+contentString);
                     //adding extra quotations around + marker.title + made this work
