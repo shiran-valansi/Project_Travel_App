@@ -59,6 +59,7 @@
                     var end = pinpoint_list[i]["end"];
                     var rating = pinpoint_list[i]["rating"];
                     var description = pinpoint_list[i]["description"];
+                     var photos = pinpoint_list[i]["photos"];
 
                     // var marker = new google.maps.Marker({
                     //     position: position,
@@ -73,7 +74,8 @@
                                   start: start,
                                   end: end,
                                   rating: rating,
-                                  description: description
+                                  description: description,
+                                  photos: photos
                     }));
 
                     
@@ -86,7 +88,13 @@
                     //go over each marker and make info window with event listener
                    
                     let marker = markers[i];
-                       
+                    let helper_string='';
+                    for (let k=0;k<marker.photos.length;k++){
+                        
+                        helper_string += '<img src="'+marker.photos[k]["file_path"]+'"'+' alt="'+marker.photos[k]["file_path"]+'"'+' height="100" width="100">'
+                    }
+
+
                 /////the one that works:
                     // var contentString = "<h1>" + marker.title  + "</h1>"+ "<button id='deleteMarker' class='deleteMarker'>Delete</button>";
                 ////doesn't work:
@@ -100,7 +108,8 @@
                     //trying data attribute- added data-title to edit button
                     // var contentString = '<h1>' + marker.title + '</h1>'+'<h5>' + marker.description + '</h5>' +'<h5>'+ 'rating:' +marker.rating +'</h5>' +'<p>'+ marker.start +'</p>' +'<p>'+ marker.end +'</p>'  + '<button id="deleteMarker" class="deleteMarker"> Delete </button>' + "<button id='addMarker'  data-title=" + marker.title + 'class="btn btn-primary"  data-toggle="modal" data-target="#exampleModalLong" >Edit</button>';
 
-                    var contentString = '<h1>' + marker.title + '</h1>'+'<h5>' + marker.description + '</h5>' +'<h5>'+ 'rating:' +marker.rating +'</h5>' +'<p>'+ marker.start +'</p>' +'<p>'+ marker.end +'</p>';
+                     var contentString = '<h1>' + marker.title + '</h1>'+'<h5>' + marker.description + '</h5>' +'<h5>'+ 'rating:' +marker.rating +'</h5>' +'<p>'+ marker.start +'</p>' +'<p>'+ marker.end +'</p>'+'<p>' +helper_string +'</p>'+'<button id="addMarker"  data-title="' + marker.title + '"class="btn btn-primary"  data-position=" '+ marker.position+ '"  data-toggle="modal" data-target="#exampleModalLong" >Edit</button>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' +'<button id="deleteMarker" class="deleteMarker"> Delete </button>';
+
 
                     //adding extra quotations around + marker.title + made this work
 //example of quotations:

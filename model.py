@@ -24,7 +24,7 @@ class User(db.Model):
 
     def __repr__(self):
         """Provide representation on User info"""
-        return f"<User: user_id= {self.user_id}, fname= {self.fname}, lname= {self.fname}, email={self.email}>"
+        return f"<User: user_id= {self.user_id}, fname= {self.fname}, lname= {self.lname}, email={self.email}>"
 
 
 

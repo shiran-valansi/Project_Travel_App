@@ -40,6 +40,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 
+
+
 # Function to check if an extension is valid and to upload the file and 
 # redirects the user to the URL for the uploaded file:
 
@@ -80,8 +82,9 @@ def upload_file():
     photos_list = get_photos()
 
     user_trip=UserTrip.query.filter(UserTrip.user_id==session["current_user_id"], UserTrip.trip_id==session["current_trip_id"]).first()
-    if user_trip.is_admin:
-        return render_template("album.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
+    if user_trip:
+        if user_trip.is_admin:
+            return render_template("album.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
     return render_template("trip_photos_no_edit.html", pinpoint_dict_list=pinpoint_dict_list, photos_list=photos_list)
 
 
@@ -245,8 +248,8 @@ def get_followers():
     user_trips = UserTrip.query.filter(UserTrip.trip_id==session["current_trip_id"]).all()
     for row in user_trips:
         user = User.query.filter(User.user_id == row.user_id).first()
-        # print("this is user")
-        # print(user.fname)
+        print("this is user")
+        print(user.fname)
         #if row.user_id!=user_id: #all users exept for current user
         if row.is_admin: 
             admin_list.append(user)
@@ -254,10 +257,10 @@ def get_followers():
         else:
             followers_list.append(user)
             followers_id_list.append(user.user_id)
-    # print("admin list:")
-    # print(admin_list)
-    # print("followers list:")
-    # print(followers_list)
+    print("admin list:")
+    print(admin_list)
+    print("followers list:")
+    print(followers_list)
     return render_template("followers.html", followers_list=followers_list, followers_id_list=followers_id_list, admin_list=admin_list, admin_id_list=admin_id_list)
 
 
@@ -365,8 +368,11 @@ def get_trip_details(trip_name):
     """gets and shows trip details """
     ####################################################
     # going to work if there's only one unique trip name
+    print("thetrip name is")
+    print(trip_name)
     user_id=session['current_user_id']
-
+    print("user_id is")
+    print(user_id)
     # need to filter for trip name AND user id, which is already in the session
     # current_trip = Trip.query.filter(Trip.trip_name==trip_name, User.user_id==user_id).first()
     current_trip = Trip.query.filter(Trip.trip_name==trip_name).first()
@@ -502,6 +508,8 @@ def get_user_details(user_id):
 
     for trip in current_user.trips:
         print("going over each trip")
+        print(trip)
+        print(trip.trip_name)
         user_trip = UserTrip.query.filter(UserTrip.user_id==user_id, UserTrip.trip_id==trip.trip_id).first()
         if user_trip.is_admin:
             my_trips.append(trip)
@@ -512,8 +520,8 @@ def get_user_details(user_id):
 
     my_trip_ids = tuple(my_trip_ids)
     session["my_trip_ids"] = my_trip_ids
-    # print("session###############")
-    # print(session["my_trip_ids"])
+    print("session###############")
+    print(session["my_trip_ids"])
 
     return render_template("user_profile.html", user=current_user, my_trips=my_trips, followed_trips=followed_trips)
 
@@ -777,6 +785,8 @@ def add_trip_form():
 def add_trip():
     """add trip details to database"""
     trip_name = request.form.get("trip_name")
+    print("trip name:")
+    print(trip_name)
     start_trip = request.form.get("start_trip")
     end_trip = request.form.get("end_trip")
     is_public = request.form.get("is_public")
@@ -791,12 +801,26 @@ def add_trip():
     session["current_trip_id"]=new_trip.trip_id
     session["current_trip_name"]=new_trip.trip_name
     
+
     # connecting the new trip to the cuerrent user through user_trip tableS
     new_user_trip = UserTrip(user_id=session["current_user_id"], trip_id=session["current_trip_id"], is_admin=is_admin)
     db.session.add(new_user_trip)
     db.session.commit()
 
+    # my_trip_ids=[]
+    # current_user.trips = UserTrip.query.filter(UserTrip.user_id==session["current_user_id"]).all()
+    # for user_trip in current_user.trips:
+    #     print("going over each trip")
+    #     # user_trip = UserTrip.query.filter(UserTrip.user_id==user_id, UserTrip.trip_id==trip.trip_id).first()
+    #     if user_trip.is_admin:
+    #         # my_trips.append(trip)
+    #         my_trip_ids.append(user_trip.trip_id)
+    #     # else:
+    #     #     followed_trips.append(user_trip.trip_id)
 
+
+    # my_trip_ids = tuple(my_trip_ids)
+    # session["my_trip_ids"] = my_trip_ids
 
     # return redirect("/search/{}".format(trip_name))
     return redirect("/search")
@@ -926,7 +950,14 @@ def explore_trips():
     # get list of users with public profiles
     all_users_list = User.query.filter().group_by(User.user_id).all()
     print("got users list")
-    print (all_users_list[0])
+    print (all_users_list)
+
+    # db.session.query(UserTrip).filter(UserTrip.trip_id == 12).\
+    # delete(synchronize_session=False) 
+
+   
+   
+
     return render_template("explore-try.html", all_users_list=all_users_list)
 
 
@@ -946,3 +977,15 @@ if __name__ == "__main__":
     # DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0", port="5001")
+
+    db.session.query(Photo).filter(Photo.photo_id == 1).\
+    delete(synchronize_session=False)
+
+    db.session.query(Pinpoint).filter(Pinpoint.trip_id == 12).\
+    delete(synchronize_session=False)
+
+    db.session.query(Trip).filter(Trip.trip_id == 12).\
+    delete(synchronize_session=False)
+
+      
+    db.session.commit()

@@ -286,7 +286,7 @@ header > .wrapper a {
   background-color: blanchedalmond;
 }
 .c-calendar {
-  padding-top: 80px;
+  /*padding-top: 80px;*/
   display: flex;
   justify-content: space-between;
   flex-direction: row;

@@ -22,13 +22,13 @@
     <br><br>
 </ul>
 
-<br><br><br><br><br><br><br>
-<div class="container">
-  <div class="row vertical-center row-bottom-margin">
+<br><br><br><br><br><br><br><br><br>
+<div class="container"><br><br><br>
+  <div class="row vertical-center row-bottom-margin" style="height:50px">
     {% for user in all_users_list %}
           {% if user.user_id != session['current_user_id']%}
-            <div class="col-sm-4 ">
-              <div class="card scroller scrollbar-near-moon">
+            <div class="col-sm-3 ">
+              <div class="card scroller scrollbar-near-moon" style="margin:10px">
                 <div class="card-body">
                   <h5 class="card-title"><a href="/user-friend/{{user.user_id}}" >{{user.fname}}&nbsp{{user.lname}}</a></h5>
               

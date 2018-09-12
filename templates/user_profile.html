@@ -24,7 +24,7 @@
           <!-- <p class="card-text"> MY TRIPS GO HERE </p> -->
           <p> 
             <ul>{% for trip in my_trips %}
-                    <li><a href="/trip/{{trip.trip_name}}" >{{trip.trip_name}}</a></li>
+                    <li><a href="/trip/{{trip.trip_name}}">{{trip.trip_name}}</a></li>
                 {% endfor %}
                 {% if not my_trips %}
                     No trips to show

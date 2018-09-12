@@ -14,8 +14,10 @@ def load_users(users_filename):
     User.query.delete()
 
     for row in open(users_filename):
+        print("row:")
+        print(row)
         row = row.rstrip()
-        fname, lname, email, password = row.split(",")
+        fname,lname,email,password = row.split(",")
 
         user = User(fname=fname,
                     lname=lname,

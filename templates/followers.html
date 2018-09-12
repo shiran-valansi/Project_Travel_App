@@ -32,9 +32,9 @@
                                         <li> <a href="/users/{{session['current_user_id']}}" >Me</a></li>
                                     {%endif%}
                                 {%endfor%}
-                                {%if admin_list|length ==1%}
+                                <!-- {%if admin_list|length ==1%}
                                     <li><a href="/users/{{session['current_user_id']}}" >Only Me</a> </li>
-                                {%endif%}
+                                {%endif%} -->
                             </ul>
                         {% else %}
                         <p>No admins! Weird, right?</p>
@@ -90,7 +90,10 @@
                 <!-- if I am not an admin or a follower
                 show button/hidden form to "follow this trip"
                 the form will submit to make-follower route -->
-                {% if not session["current_trip_id"] in session["my_trip_ids"] and not session["current_user_id"] in followers_id_list %}
+                <!-- if the current trip is not on my trips list and I am not a follower -->
+                {% if (session["current_user_id"] not in admin_id_list) and (session["current_user_id"] not in followers_id_list) %} 
+                <br>
+
                             <form action="/make-follower" method="POST">
                                 <input type="hidden" name="user_id" value="{{session['current_user_id']}}">
                                 <input type="submit" class="btn btn-primary btn-lg  btn-new" role="button" value="Follow this trip">
