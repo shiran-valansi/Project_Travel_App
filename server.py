@@ -952,11 +952,27 @@ def explore_trips():
     print("got users list")
     print (all_users_list)
 
-    # db.session.query(UserTrip).filter(UserTrip.trip_id == 12).\
+    # db.session.query(UserTrip).filter(UserTrip.trip_id == 3).\
     # delete(synchronize_session=False) 
 
    
-   
+    
+
+    
+
+    # db.session.query(Trip).filter(Trip.trip_id == 3).\
+    # delete(synchronize_session=False)
+    # trip= db.session.query(Trip).filter(Trip.trip_id==13)
+    # trip.trip_name="Serena's Bachelorette Party"
+
+    # db.session.query(Photo).filter(Photo.photo_id ==19).\
+    # delete(synchronize_session=False)
+
+    # db.session.query(Pinpoint).filter(Pinpoint.pp_id == 37).\
+    # delete(synchronize_session=False)
+
+      
+    # db.session.commit()
 
     return render_template("explore-try.html", all_users_list=all_users_list)
 
@@ -978,14 +994,4 @@ if __name__ == "__main__":
 
     app.run(host="0.0.0.0", port="5001")
 
-    db.session.query(Photo).filter(Photo.photo_id == 1).\
-    delete(synchronize_session=False)
 
-    db.session.query(Pinpoint).filter(Pinpoint.trip_id == 12).\
-    delete(synchronize_session=False)
-
-    db.session.query(Trip).filter(Trip.trip_id == 12).\
-    delete(synchronize_session=False)
-
-      
-    db.session.commit()
