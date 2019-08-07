@@ -1,10 +1,11 @@
                                ###################### Project_Travel_App #########################
 Watch the demo @ https://youtu.be/_UOR5s2xI-k
+
 This is an app to plan out trips and travels on a map, as well as an itinerary in a calendar to correlate with the map.
 
 Travelary is an app that helps users plan out their travels and store their itineraries. 
 For every trip a user adds, they can add several attractions (restaurants, museums, parks, etc) 
-that are rendered in a map or calendar view. 
+that are saved in the trip's map or calendar view. 
 Each attraction is then rated by the user for future reference.
 There is also a social aspect to the app, 
 where you can share your trip with friends by inviting them to be admins and contribute to the trip, 
